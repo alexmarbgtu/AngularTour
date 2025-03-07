@@ -53,6 +53,7 @@
     <p-button
       label="Зарегистрироваться"
       [disabled]="login.length < 3 || password.length < 3 || password.length > 20 || email.length < 5 || password !== repPassword"
+      (onClick)="onClick()"
     />
   </div>
 </div>

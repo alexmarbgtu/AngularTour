@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PasswordModule } from 'primeng/password';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-registration',
@@ -30,5 +31,14 @@ export class RegistrationComponent implements OnInit {
   isEmail: boolean = false;
   title:string = "Сохранить в хранилище";
 
-  ngOnInit(): void {}
+  constructor(private userService: UserService) {}
+
+  ngOnInit(): void {
+
+  }
+
+  onClick(): void {
+    this.userService.addUser({login: this.login, password: this.password, email: this.email}, this.isRemember)
+  }
+
 }

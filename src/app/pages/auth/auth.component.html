@@ -1,14 +1,14 @@
 <div class="flex justify-content-center">
   <p-tabs value="0">
     <p-tablist>
-      <p-tab value="0">Авторизация</p-tab>
-      <p-tab value="1">Регистрация</p-tab>
+      <p-tab value="0" (click)="toggleAuth()">Авторизация</p-tab>
+      <p-tab value="1" (click)="toggleReg()">Регистрация</p-tab>
     </p-tablist>
     <p-tabpanels>
-      <p-tabpanel value="0">
+      <p-tabpanel [@openClose]="isAuth ? 'open' : 'closed'" value="0">
         <app-authorization></app-authorization>
       </p-tabpanel>
-      <p-tabpanel value="1">
+      <p-tabpanel [@openClose]="isReg ? 'open' : 'closed'" value="1">
         <app-registration></app-registration>
       </p-tabpanel>
     </p-tabpanels>
