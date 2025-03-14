@@ -7,6 +7,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { PasswordModule } from 'primeng/password';
 import { UserService } from '../../../services/user.service';
 import { IUser } from '../../../models/user';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-authorization',
@@ -29,16 +31,21 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
   isPassword: boolean = false;
   title: string = 'Сохранить в хранилище';
 
-  constructor(
-    private userService: UserService,
-  ) {
-    const user: IUser = {
-      login: this.login,
-      password: this.password,
-    };
-  }
+  constructor(private userService: UserService, private router: Router, private messageService: MessageService) {}
 
   ngOnInit(): void {}
 
   ngOnDestroy(): void {}
+
+  onAuth(): void {
+    const postObj = {login: this.login, password: this.password} as IUser
+    this.userService.authUser(postObj).subscribe(
+      () => {this.router.navigate(['tickets']);},
+      () => {
+        this.messageService.add({ severity: 'error', detail: 'Ошибка авторизации', life: 3000 });
+      }
+    )
+
+
+  }
 }

@@ -4,8 +4,11 @@ import { Component, OnChanges, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
-import { PasswordModule } from 'primeng/password';
+import { Password, PasswordModule } from 'primeng/password';
 import { UserService } from '../../../services/user.service';
+import { MessageService } from 'primeng/api';
+import { IUserRegister } from '../../../models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -29,16 +32,36 @@ export class RegistrationComponent implements OnInit {
   isLogin: boolean = false;
   isPassword: boolean = false;
   isEmail: boolean = false;
-  title:string = "Сохранить в хранилище";
+  title: string = 'Сохранить в хранилище';
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private messageService: MessageService,
+    private router: Router
+  ) {}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   onClick(): void {
-    this.userService.addUser({login: this.login, password: this.password, email: this.email}, this.isRemember)
+    this.userService.addUser(
+      { login: this.login, password: this.password, email: this.email },
+      this.isRemember
+    );
   }
 
+  onAuth(): void {
+    const postObj = {login: this.login, password: this.password, email: this.email} as IUserRegister
+    this.userService.registerUser(postObj).subscribe(
+      () => {
+        this.router.navigate(['tickets']);
+      },
+      () => {
+        this.initToast('error', 'Пользователь не зарегистрирован')
+      }
+    )
+  }
+
+  initToast(type: 'error' | 'success', text: string): void {
+    this.messageService.add({severity: type, detail: text, life: 3000})
+  }
 }
