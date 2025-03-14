@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
+import { Toast } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { RegistrationComponent } from './registration/registration.component';
 import { AuthorizationComponent } from "./authorization/authorization.component";
 import {
@@ -8,9 +10,8 @@ import {
   style,
   animate,
   transition,
-  // ...
 } from '@angular/animations';
-import { delay } from 'rxjs';
+// import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -19,9 +20,11 @@ import { delay } from 'rxjs';
     RegistrationComponent,
     TabsModule,
     AuthorizationComponent,
+    Toast,
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
+  providers: [MessageService],
   animations: [
     trigger('openClose', [
       state(

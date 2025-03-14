@@ -3,6 +3,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "command": "source ~/.zprofile",
+      "name": "Start Source",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "source ~/.zprofile; npm run serverWithNg",
+      "name": "Run serverWithNg",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",
