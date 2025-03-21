@@ -4,9 +4,12 @@ const express = require("express");
 const { log } = require("console");
 
 // user
-const userJson = "./src/app/shared/mocks/users.json";
+const userJson = "./server-data/users.json";
 const jsonFileData = fs.readFileSync(userJson, "utf-8");
 let parseJsonData = JSON.parse(jsonFileData);
+
+//tickets
+const ticketsJson = "./server-data/tours.json";
 
 const app = express();
 const port = 3000;
@@ -90,6 +93,13 @@ app.post("/auth", (req, res) => {
   } else {
     throw new Error("не найдено свойство login или password");
   }
+});
+
+app.get("/tours", (req, res) => {
+  log("tours");
+  const jsonData = JSON.parse( fs.readFileSync(ticketsJson, "utf-8", (data, err) => {}, (err) => {console.log('Error read file tours, ', err)}));
+    console.log("parseJsonData auth", parseJsonData);
+  res.send(jsonData);
 });
 
 // run and listen serve

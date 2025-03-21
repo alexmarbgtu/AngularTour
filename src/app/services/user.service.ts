@@ -13,20 +13,20 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  private getUser(login: string): IUser | null {
-    return this.userStore.find((user) => login === user.login) || null
-  }
+  // private getUser(login: string): IUser | null {
+  //   return this.userStore.find((user) => login === user.login) || null
+  // }
 
-  addUser(user: IUser, isRememberMe: boolean): string | void {
-    if (this.getUser(user.login)) {
-      return 'Пользователь уже существует'
-    }
-    this.userStore.push(user)
-  }
+  // addUser(user: IUser, isRememberMe: boolean): string | void {
+  //   if (this.getUser(user.login)) {
+  //     return 'Пользователь уже существует'
+  //   }
+  //   this.userStore.push(user)
+  // }
 
-  checkUser(login: string): boolean {
-    return !!this.getUser(login)
-  }
+  // checkUser(login: string): boolean {
+  //   return !!this.getUser(login)
+  // }
 
   registerUser(user: IUserRegister): Observable<string> {
     return this.http.post(API.registration, user, {responseType: 'text'})

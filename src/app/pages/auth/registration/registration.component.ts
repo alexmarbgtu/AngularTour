@@ -53,7 +53,7 @@ export class RegistrationComponent implements OnInit {
     const postObj = {login: this.login, password: this.password, email: this.email} as IUserRegister
     this.userService.registerUser(postObj).subscribe(
       () => {
-        this.router.navigate(['tickets']);
+        this.router.navigate(['tours']);
       },
       () => {
         this.initToast('error', 'Пользователь не зарегистрирован')

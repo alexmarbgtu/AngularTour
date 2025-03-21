@@ -40,7 +40,7 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
   onAuth(): void {
     const postObj = {login: this.login, password: this.password} as IUser
     this.userService.authUser(postObj).subscribe(
-      () => {this.router.navigate(['tickets']);},
+      () => {this.router.navigate(['tours']);},
       () => {
         this.messageService.add({ severity: 'error', detail: 'Ошибка авторизации', life: 3000 });
       }

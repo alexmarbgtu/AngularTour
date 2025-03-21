@@ -1,3 +1,17 @@
-<div>
-  Header
+<div class="layout-header">
+  <div class="layout-header__menu">
+
+  </div>
+  <div class="layout-header__right-block">
+    <div class="user-info"></div>
+    <div class="logout"></div>
+    <div class="date">
+      <div>
+        {{ dateTime | date: 'HH:mm:ss' }}
+      </div>
+      <div>
+        {{ dateTime | date: 'EEEE' }}
+      </div>
+    </div>
+  </div>
 </div>
