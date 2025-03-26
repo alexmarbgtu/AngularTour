@@ -42,12 +42,12 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onClick(): void {
-    this.userService.addUser(
-      { login: this.login, password: this.password, email: this.email },
-      this.isRemember
-    );
-  }
+  // onClick(): void {
+  //   this.userService.addUser(
+  //     { login: this.login, password: this.password, email: this.email },
+  //     this.isRemember
+  //   );
+  // }
 
   onAuth(): void {
     const postObj = {login: this.login, password: this.password, email: this.email} as IUserRegister

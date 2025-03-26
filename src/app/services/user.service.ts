@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  private userStore: IUser[] = []
+  // private userStore: IUser[] = []
   private currentUser: IUser | null = null
 
   constructor(private http: HttpClient) { }
@@ -36,4 +36,11 @@ export class UserService {
     return this.http.post(API.auth, user, { responseType: 'text' });
   }
 
+  getUser(): IUser {
+    return this.currentUser
+  }
+
+  setUser(user: IUser): void {
+    this.currentUser = user
+  }
 }

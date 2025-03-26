@@ -1,0 +1,13 @@
+<div class="tour-info m-4">
+  @if (tour?.name) {
+    <p-card
+    header="{{tour.name}}"
+    subheader="{{tour.price}}"
+    styleClass=""
+    >
+      <img src="/img/{{tour.img}}" alt="Img-tour" class="w-full">
+      <p>Тур-оператор: {{tour.tourOperator}}</p>
+      <p>{{tour.description}}</p>
+    </p-card>
+  }
+</div>

@@ -5,5 +5,10 @@ export interface ITour {
   tourOperator: string,
   price: string,
   img: string,
+  data?: string,
   type?: string
+}
+
+export interface ITours {
+  tours: ITour[]
 }

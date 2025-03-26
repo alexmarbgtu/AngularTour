@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+.tour-info {
+  & .Img-tour {
+    max-width: 700px;
+  }
+}

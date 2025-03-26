@@ -8,8 +8,8 @@ const userJson = "./server-data/users.json";
 const jsonFileData = fs.readFileSync(userJson, "utf-8");
 let parseJsonData = JSON.parse(jsonFileData);
 
-//tickets
-const ticketsJson = "./server-data/tours.json";
+//tour
+const toursJson = "./server-data/tours.json";
 
 const app = express();
 const port = 3000;
@@ -97,9 +97,27 @@ app.post("/auth", (req, res) => {
 
 app.get("/tours", (req, res) => {
   log("tours");
-  const jsonData = JSON.parse( fs.readFileSync(ticketsJson, "utf-8", (data, err) => {}, (err) => {console.log('Error read file tours, ', err)}));
+  const jsonData = JSON.parse( fs.readFileSync(toursJson, "utf-8", (data, err) => {}, (err) => {console.log('Error read file tours, ', err)}));
     console.log("parseJsonData auth", parseJsonData);
   res.send(jsonData);
+});
+
+/*******************get tour */
+app.get('/tour/:id', (req, res) => {
+  const jsonFileData =  fs.readFileSync(toursJson, 'utf-8', (err, data) => {}, (err) => {
+    console.log('err read file tours', err);
+  });
+            // parse data
+  const  parseJsonData = JSON.parse(jsonFileData);
+  const paramId = req.params.id;
+
+
+  const item = parseJsonData.tours.find((tour) => tour.id === paramId);
+  if (item) {
+    res.send(item);
+  } else {
+    throw new Error('Тур не найден по id:', paramId);
+  }
 });
 
 // run and listen serve
