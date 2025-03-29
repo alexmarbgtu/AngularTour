@@ -120,6 +120,22 @@ app.get('/tour/:id', (req, res) => {
   }
 });
 
+/*******************get nearest tour */
+app.get('/nearestTours', (req, res) => {
+  console.log("get nearest tour");
+
+  const jsonFileData =  fs.readFileSync(toursJson, 'utf-8', (err, data) => {}, (err) => {
+    console.log('err read file tours', err);});
+
+            // parse data
+    const  parseJsonData = JSON.parse(jsonFileData);
+    const locationId = req.query?.locationId;
+    console.log('req.query', req.query)
+
+    const items = parseJsonData.tours.filter((tour) => tour?.locationId === locationId);
+    res.send(items);
+});
+
 // run and listen serve
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);

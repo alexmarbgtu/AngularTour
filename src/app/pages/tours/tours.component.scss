@@ -7,3 +7,16 @@
     position: relative;
   }
 }
+
+.find-tour {
+  margin-left: 42px;
+  margin-right: 42px;
+}
+
+.tour-item {
+  cursor: pointer;
+
+  &:hover {
+    opacity: .9;
+  }
+}

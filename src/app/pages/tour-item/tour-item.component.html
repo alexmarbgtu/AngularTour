@@ -1,13 +1,26 @@
-<div class="tour-info m-4">
-  @if (tour?.name) {
-    <p-card
-    header="{{tour.name}}"
-    subheader="{{tour.price}}"
-    styleClass=""
-    >
-      <img src="/img/{{tour.img}}" alt="Img-tour" class="w-full">
-      <p>Тур-оператор: {{tour.tourOperator}}</p>
-      <p>{{tour.description}}</p>
-    </p-card>
+<p-button
+  label="Назад"
+  styleClass="p-button-link"
+  routerLink="/tours"
+/>
+<div class="flex flex-1 tour-item-wrap">
+  @if (tour) {
+    <div>
+      <p-card
+
+        header="{{tour.name}}"
+        subheader="{{tour.price}}"
+      >
+        <img src="/img/{{tour.img}}" alt="Img-tour" class="w-full">
+        <p>Тур-оператор: {{tour.tourOperator}}</p>
+        <p>{{tour.description}}</p>
+      </p-card>
+    </div>
+  } @else {
+    <div class="no-data">Нет данных</div>
   }
+  <div class="nearest-tour">
+    <app-nearest-tours [tour]="tour" />
+  </div>
 </div>
+
