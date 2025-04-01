@@ -20,7 +20,10 @@
     <div class="no-data">Нет данных</div>
   }
   <div class="nearest-tour">
-    <app-nearest-tours [tour]="tour" />
+    <app-nearest-tours
+      (onTourChange)="onTourChange($event)"
+      [tour]="tour"
+    />
   </div>
 </div>
 

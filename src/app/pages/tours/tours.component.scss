@@ -19,4 +19,8 @@
   &:hover {
     opacity: .9;
   }
+  &.active {
+    border: #b91818 1px solid;
+    border-radius: 10px;
+  }
 }

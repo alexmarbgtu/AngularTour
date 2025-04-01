@@ -5,6 +5,7 @@ import { ITour } from '../../models/tours';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { NearestToursComponent } from './nearest-tours/nearest-tours.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-tour-item',
@@ -18,7 +19,8 @@ export class TourItemComponent implements OnInit {
 
   constructor(
     private toursService: ToursService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -33,5 +35,10 @@ export class TourItemComponent implements OnInit {
         console.log('Error: ', err);
       }
     );
+  }
+
+  onTourChange(ev: ITour): void {
+    this.tour = ev
+    this.location.replaceState('tours/' + this.tour.id)
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IUser, IUserRegister } from '../models/user';
+import { IUser, IUserRegister, userToken } from '../models/user';
 import { HttpClient } from '@angular/common/http';
 import { API } from '../shared/api';
 import { Observable } from 'rxjs';
@@ -38,8 +38,7 @@ export class UserService {
 
   getUser(): IUser {
     if (!this.currentUser) {
-      const sessionUser: IUser =
-        JSON.parse(sessionStorage.getItem('AngularTourUser'));
+      const sessionUser: IUser = JSON.parse(sessionStorage.getItem(userToken));
       if (sessionUser) {
         this.currentUser = sessionUser
       } else {
@@ -51,6 +50,10 @@ export class UserService {
 
   setUser(user: IUser): void {
     this.currentUser = user
-    sessionStorage.setItem('AngularTourUser', JSON.stringify(user));
+    if (user !== null) {
+      sessionStorage.setItem(userToken, JSON.stringify(user));
+    } else {
+      sessionStorage.removeItem(userToken)
+    }
   }
 }

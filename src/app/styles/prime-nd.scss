@@ -33,8 +33,6 @@
 .tour-item-galleria {
 
   & .p-galleria-item {
-    & > img {
-      height: 250px;
-    }
+    height: 250px;
   }
 }
