@@ -36,3 +36,13 @@
     height: 250px;
   }
 }
+
+p-menubar {
+  & .p-menubar-button:hover{
+    background: none;
+  }
+  & .p-menubar.p-component:not(.p-menubar-mobile) {
+    background: none;
+    border: none;
+  }
+}

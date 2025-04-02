@@ -31,7 +31,7 @@ export class HightBlockDirective implements AfterViewInit, OnInit, OnChanges, Af
     const isItemLoaded = this.el.nativeElement.querySelectorAll(this.selector)
     if (this.initFirst && isItemLoaded?.length && !this.isLoaded) {
       this.isLoaded = true
-      this
+      this.changeIndex(0)
     }
   }
 

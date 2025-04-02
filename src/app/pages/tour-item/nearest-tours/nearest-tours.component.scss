@@ -1,3 +1,10 @@
 :host {
   display: block;
 }
+
+.tour-item-galleria {
+
+  & .tour-item-galleria__img {
+    cursor: pointer;
+  }
+}

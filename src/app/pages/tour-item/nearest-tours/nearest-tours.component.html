@@ -1,12 +1,39 @@
-<p-galleria
-  class="tour-item-galleria"
-  (activeIndexChange)="activeIndexChange($event)"
-  [value]="toursArr()"
-  [showIndicators]="true"
-  [showThumbnails]="false"
-  [containerStyle]="{ 'min-width': '340px' }"
+<p-inputgroup
+  class="mb-3"
 >
-    <ng-template #item let-item>
-        <img [ngSrc]="'/img/'+item.img" priority="" fill />
-    </ng-template>
-</p-galleria>
+  <input
+    pInputText
+    placeholder="Поиск тура"
+    #searchInput
+  />
+  <p-inputgroup-addon>
+      <p-button icon="pi pi-search" severity="secondary" variant="text" />
+  </p-inputgroup-addon>
+</p-inputgroup>
+
+@if (toursArr().length > 0) {
+  <p-galleria
+    class="tour-item-galleria"
+    (activeIndexChange)="activeIndexChange($event)"
+    [value]="toursArr()"
+    [showIndicators]="true"
+    [showThumbnails]="false"
+    [containerStyle]="{ 'min-width': '340px' }"
+    [activeIndex]="activeIndex"
+  >
+      <ng-template #item let-item>
+        <img
+          [ngSrc]="'/img/'+item.img"
+          priority=""
+          fill
+          class="tour-item-galleria__img"
+          (click)="clickImgNearest($event)"
+        />
+      </ng-template>
+      <ng-template #caption let-item>
+          <div class="text-xl mb-2 font-bold">{{ item.name }}</div>
+      </ng-template>
+  </p-galleria>
+} @else {
+  <p>Туров не найдено</p>
+}

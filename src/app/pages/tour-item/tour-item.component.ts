@@ -9,7 +9,12 @@ import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-tour-item',
-  imports: [CardModule, ButtonModule, RouterLink, NearestToursComponent],
+  imports: [
+    CardModule,
+    ButtonModule,
+    RouterLink,
+    NearestToursComponent
+  ],
   templateUrl: './tour-item.component.html',
   styleUrl: './tour-item.component.scss',
 })
@@ -38,7 +43,7 @@ export class TourItemComponent implements OnInit {
   }
 
   onTourChange(ev: ITour): void {
-    this.tour = ev
-    this.location.replaceState('tours/' + this.tour.id)
+    this.tour = ev;
+    this.location.replaceState('tours/' + this.tour.id);
   }
 }
