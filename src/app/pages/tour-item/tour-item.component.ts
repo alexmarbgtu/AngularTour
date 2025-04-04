@@ -6,6 +6,8 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { NearestToursComponent } from './nearest-tours/nearest-tours.component';
 import { Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { isValid } from 'date-fns'
 
 @Component({
   selector: 'app-tour-item',
@@ -13,7 +15,9 @@ import { Location } from '@angular/common';
     CardModule,
     ButtonModule,
     RouterLink,
-    NearestToursComponent
+    NearestToursComponent,
+    DatePipe
+
   ],
   templateUrl: './tour-item.component.html',
   styleUrl: './tour-item.component.scss',
@@ -21,6 +25,7 @@ import { Location } from '@angular/common';
 export class TourItemComponent implements OnInit {
   tourId: string = null;
   tour: ITour;
+  tourDate: Date = null
 
   constructor(
     private toursService: ToursService,
@@ -34,6 +39,8 @@ export class TourItemComponent implements OnInit {
       (data) => {
         if (data?.name) {
           this.tour = data;
+          if (isValid(new Date(this.tour.date)))
+            this.tourDate = new Date(this.tour.date);
         }
       },
       (err) => {
@@ -46,4 +53,5 @@ export class TourItemComponent implements OnInit {
     this.tour = ev;
     this.location.replaceState('tours/' + this.tour.id);
   }
+
 }

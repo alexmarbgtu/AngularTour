@@ -21,8 +21,43 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura,
       },
+      translation: {
+        dayNames: [
+          'Воскресенье',
+          'Понедельник',
+          'Вторник',
+          'Среда',
+          'Четверг',
+          'Пятница',
+          'Суббота',
+        ],
+        dayNamesShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+        dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+        monthNames: [
+          'Январь',
+          'Февраль',
+          'Март',
+          'Апрель',
+          'Май',
+          'Июнь',
+          'Июль',
+          'Август',
+          'Сентябрь',
+          'Октябрь',
+          'Ноябрь',
+          'Декабрь',
+        ],
+        monthNamesShort: [
+          'янв', 'фев', 'мар', 'апр', 'мая', 'июня', 'июля', 'авг', 'сен', 'окт', 'ноя', 'дек',
+        ],
+        firstDayOfWeek: 1,
+        // dateFormat: 'dd.mm.yy',
+        clear: 'Очистить',
+        today: 'Сегодня'
+        //translations
+      },
     }),
     provideHttpClient(),
-    provideAppInitializer(() => initializeApp(inject(ConfigService)))
+    provideAppInitializer(() => initializeApp(inject(ConfigService))),
   ],
 };

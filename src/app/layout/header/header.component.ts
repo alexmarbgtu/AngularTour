@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { IUser } from '../../models/user';
 import { MenubarModule } from 'primeng/menubar'

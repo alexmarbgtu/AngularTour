@@ -7,9 +7,15 @@ export interface ITour {
   img: string,
   locationId: string,
   data?: string,
+  date?: string,
   type?: string
 }
 
 export interface ITours {
   tours: ITour[]
+}
+
+export interface TourType {
+  key: string;
+  label: string;
 }
