@@ -1,0 +1,13 @@
+<div class="settings-wrap">
+  @for (item of menuItems; track item.patch) {
+    <p-button
+      [label]="item.label"
+      styleClass="p-button-link"
+      [routerLink]="item.patch"
+    />
+  }
+
+  <div class="menu-content">
+    <router-outlet/>
+  </div>
+</div>
