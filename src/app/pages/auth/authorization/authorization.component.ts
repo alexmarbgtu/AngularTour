@@ -27,7 +27,7 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
   login: string = '';
   password: string;
   isRemember: boolean;
-  isLogin: boolean = false;
+  // isLogin: boolean = false;
   isPassword: boolean = false;
   title: string = 'Сохранить в хранилище';
 
