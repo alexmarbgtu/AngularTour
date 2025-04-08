@@ -37,21 +37,14 @@ export class UserService {
   }
 
   getUser(): IUser {
-    if (!this.currentUser) {
-      const sessionUser: IUser = JSON.parse(sessionStorage.getItem(userToken));
-      if (sessionUser) {
-        this.currentUser = sessionUser
-      } else {
-        return null
-      }
-    }
-    return this.currentUser;
+    const sessionUser: IUser = JSON.parse(sessionStorage.getItem(userToken));
+    return this.currentUser || sessionUser;
   }
 
   setUser(user: IUser): void {
     this.currentUser = user
     if (user !== null) {
-      sessionStorage.setItem(userToken, JSON.stringify(user));
+      sessionStorage.setItem(userToken, JSON.stringify({login:user.login}));
     } else {
       sessionStorage.removeItem(userToken)
     }
