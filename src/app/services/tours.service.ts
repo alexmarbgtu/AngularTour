@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { API } from '../shared/api';
-import { ITour, ITours, TourType } from '../models/tours';
+import { ITour, ITours, ITourType } from '../models/tours';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToursService {
-  private tourTypeSubject = new Subject<TourType>();
+  private tourTypeSubject = new Subject<ITourType>();
   readonly tourType$ = this.tourTypeSubject.asObservable();
 
   private tourDateSubject = new Subject<Date | null>();
@@ -44,7 +44,7 @@ export class ToursService {
     }
   }
 
-  initChangeTourType(type: TourType): void {
+  initChangeTourType(type: ITourType): void {
     this.tourTypeSubject.next(type);
   }
 

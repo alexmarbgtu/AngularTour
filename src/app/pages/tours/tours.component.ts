@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToursService } from '../../services/tours.service';
-import { ITour, TourType } from '../../models/tours';
+import { ITour, ITourType } from '../../models/tours';
 import { CardModule } from 'primeng/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -32,7 +32,7 @@ export class ToursComponent implements OnInit, OnDestroy {
   subscriptionType: Subscription;
   subscriptionDate: Subscription;
   tourDate: number | null = null;
-  tourType: TourType = null;
+  tourType: ITourType = null;
 
   constructor(
     private toursService: ToursService,

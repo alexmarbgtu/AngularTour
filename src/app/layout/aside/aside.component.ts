@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { ToursService } from '../../services/tours.service';
 import { FormsModule } from '@angular/forms';
-import { TourType } from '../../models/tours';
+import { ITourType } from '../../models/tours';
 import { DatePickerModule } from 'primeng/datepicker';
 import { isValid } from 'date-fns';
 
@@ -18,9 +18,9 @@ export class AsideComponent implements OnInit {
 
 
   date: Date = null;
-  selectedType: TourType = null;
+  selectedType: ITourType = null;
 
-  tourTypes: TourType[] = [
+  tourTypes: ITourType[] = [
     {key: 'single', label: 'Одиночный'},
     {key: 'group', label: 'Групповой'},
     {key: 'all', label: 'Все'}
