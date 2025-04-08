@@ -9,7 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SearchPipe } from '../../shared/pipes/search.pipe';
 import { HightBlockDirective } from '../../shared/directives/hight-block.directive';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { isValid } from 'date-fns'
 
 @Component({
@@ -29,10 +29,9 @@ import { isValid } from 'date-fns'
 export class ToursComponent implements OnInit, OnDestroy {
   tours: ITour[] = [];
   toursStore: ITour[] = [];
-  subscriptionType: Subscription;
-  subscriptionDate: Subscription;
   tourDate: number | null = null;
   tourType: ITourType = null;
+  destroyed = new Subject<boolean>()
 
   constructor(
     private toursService: ToursService,
@@ -41,23 +40,27 @@ export class ToursComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscriptionType = this.toursService.tourType$.subscribe((type) => {
+    this.toursService.tourType$.pipe(
+      takeUntil(this.destroyed)
+    ).subscribe((type) => {
       this.tourType = type;
       this.tours = this.filterToursByType(this.filterToursByDate(this.toursStore));
     });
 
-    this.subscriptionDate = this.toursService.tourDate$.subscribe((date) => {
-      if (date) {
-        this.tourDate = new Date(date).setHours(0, 0, 0);
-      } else {
-        this.tourDate = null;
-      }
+    this.toursService.tourDate$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((date) => {
+        if (date) {
+          this.tourDate = new Date(date).setHours(0, 0, 0);
+        } else {
+          this.tourDate = null;
+        }
 
-      this.tours =  this.filterToursByType(
-        this.filterToursByDate(this.toursStore)
-      );
-      // this.filterToursByTypeAndDate();
-    });
+        this.tours = this.filterToursByType(
+          this.filterToursByDate(this.toursStore)
+        );
+        // this.filterToursByTypeAndDate();
+      });
 
     this.toursService.getTours().subscribe(
       (data) => {
@@ -73,8 +76,8 @@ export class ToursComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptionType.unsubscribe();
-    this.subscriptionDate.unsubscribe();
+    this.destroyed.next(true)
+    this.destroyed.complete()
   }
 
   goToTour(id: string) {
