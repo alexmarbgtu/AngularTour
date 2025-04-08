@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { forkJoin, map, Observable, Subject } from 'rxjs';
 import { API } from '../shared/api';
-import { ITour, ITours, ITourType } from '../models/tours';
+import { ICountriesResponseItem, ITour, ITours, ITourType } from '../models/tours';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +16,31 @@ export class ToursService {
 
   constructor(private http: HttpClient) {}
 
-  getTours(): Observable<ITours> {
-    return this.http.get(API.tours) as Observable<ITours>;
+  getTours(): Observable<ITour[]> {
+    const country = this.http.get<ICountriesResponseItem[]>(API.countries)
+    const tours = this.http.get<ITours>(API.tours)
+
+    return forkJoin<[ICountriesResponseItem[], ITours]>([country, tours]).pipe(
+      map((data) => {
+        let toursWithCountries: ITour[] = [];
+        const toursArr: ITour[] = data[1].tours;
+        const countriesMap = new Map();
+
+        data[0].forEach(itm => countriesMap.set(itm.iso_code2, itm));
+
+        if (Array.isArray(toursArr)) {
+          toursWithCountries = toursArr.map(itm => {
+            return {
+              ...itm,
+              country: countriesMap.get(itm.code) || null
+            }
+          })
+        }
+        return toursWithCountries
+
+      })
+    )
+
   }
 
   getTourById(id: string): Observable<ITour> {

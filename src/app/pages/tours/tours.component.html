@@ -36,6 +36,9 @@
         @else {
           <p>{{item.description}}</p>
         }
+        @if (item.country) {
+          <p>Страна: {{item.country?.name_ru}} <img [src]="item.country?.flag_url" [alt]="item.country?.name_ru"></p>
+        }
       </p-card>
     </div>
   }
