@@ -43,7 +43,7 @@ export class ToursComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscriptionType = this.toursService.tourType$.subscribe((type) => {
       this.tourType = type;
-      this.filterToursByTypeAndDate();
+      this.tours = this.filterToursByType(this.filterToursByDate(this.toursStore));
     });
 
     this.subscriptionDate = this.toursService.tourDate$.subscribe((date) => {
@@ -52,7 +52,11 @@ export class ToursComponent implements OnInit, OnDestroy {
       } else {
         this.tourDate = null;
       }
-      this.filterToursByTypeAndDate();
+
+      this.tours =  this.filterToursByType(
+        this.filterToursByDate(this.toursStore)
+      );
+      // this.filterToursByTypeAndDate();
     });
 
     this.toursService.getTours().subscribe(
@@ -92,41 +96,78 @@ export class ToursComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterToursByTypeAndDate(): void {
+  filterToursByType(toursArr: ITour[]): ITour[] {
     let filterToursArr: ITour[] = [];
     if (this.tourType) {
       switch (this.tourType.key) {
         case 'single':
-          filterToursArr = this.toursStore.filter(
-            (tour) => tour.type === 'single'
-          );
+          filterToursArr = toursArr.filter((tour) => tour.type === 'single');
           break;
 
         case 'group':
-          filterToursArr = this.toursStore.filter(
-            (tour) => tour.type === 'group'
-          );
+          filterToursArr = toursArr.filter((tour) => tour.type === 'group');
           break;
 
         case 'all':
         default:
-          filterToursArr = [...this.toursStore];
+          filterToursArr = [...toursArr];
           break;
       }
     } else {
-      filterToursArr = [...this.toursStore];
+      filterToursArr = [...toursArr];
     }
+    return filterToursArr;
+  }
 
+  filterToursByDate(toursArr: ITour[]): ITour[] {
     if (this.tourDate) {
-      this.tours = filterToursArr.filter((tour) => {
-        if (isValid(new Date(tour.date))) {
+      return toursArr.filter((tour) => {
+        if (tour.date && isValid(new Date(tour.date))) {
           return this.tourDate === new Date(tour.date).setHours(0, 0, 0, 0);
         } else {
           return false;
         }
       });
     } else {
-      this.tours = [...filterToursArr];
+      return [...toursArr];
     }
   }
+
+  // filterToursByTypeAndDate(): void {
+  //   let filterToursArr: ITour[] = [];
+  //   if (this.tourType) {
+  //     switch (this.tourType.key) {
+  //       case 'single':
+  //         filterToursArr = this.toursStore.filter(
+  //           (tour) => tour.type === 'single'
+  //         );
+  //         break;
+
+  //       case 'group':
+  //         filterToursArr = this.toursStore.filter(
+  //           (tour) => tour.type === 'group'
+  //         );
+  //         break;
+
+  //       case 'all':
+  //       default:
+  //         filterToursArr = [...this.toursStore];
+  //         break;
+  //     }
+  //   } else {
+  //     filterToursArr = [...this.toursStore];
+  //   }
+
+  //   if (this.tourDate) {
+  //     this.tours = filterToursArr.filter((tour) => {
+  //       if (isValid(new Date(tour.date))) {
+  //         return this.tourDate === new Date(tour.date).setHours(0, 0, 0, 0);
+  //       } else {
+  //         return false;
+  //       }
+  //     });
+  //   } else {
+  //     this.tours = [...filterToursArr];
+  //   }
+  // }
 }
