@@ -28,3 +28,15 @@ export interface ITourType {
   key: string;
   label: string;
 }
+
+export interface ILocation {
+  lat: number,
+  lng: number
+}
+
+export type Coords = {
+  latlng: [
+    number,
+    number
+  ]
+}

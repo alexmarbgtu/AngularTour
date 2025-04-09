@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToursService } from '../../services/tours.service';
-import { ITour, ITourType } from '../../models/tours';
+import { ILocation, ITour, ITourType } from '../../models/tours';
 import { CardModule } from 'primeng/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -11,6 +11,9 @@ import { SearchPipe } from '../../shared/pipes/search.pipe';
 import { HightBlockDirective } from '../../shared/directives/hight-block.directive';
 import { Subject, takeUntil } from 'rxjs';
 import { isValid } from 'date-fns'
+import { DialogModule } from 'primeng/dialog';
+import { MapComponent } from '../../shared/components/map/map.component';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-tours',
@@ -22,6 +25,8 @@ import { isValid } from 'date-fns'
     InputTextModule,
     SearchPipe,
     HightBlockDirective,
+    DialogModule,
+    MapComponent
   ],
   templateUrl: './tours.component.html',
   styleUrl: './tours.component.scss',
@@ -31,21 +36,29 @@ export class ToursComponent implements OnInit, OnDestroy {
   toursStore: ITour[] = [];
   tourDate: number | null = null;
   tourType: ITourType = null;
-  destroyed = new Subject<boolean>()
+  destroyed = new Subject<boolean>();
+  showModal = false;
+  location: ILocation = null;
+  temperature: number = null;
+  weather: string = null;
+  isAdmin: boolean = false;
 
   constructor(
     private toursService: ToursService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.toursService.tourType$.pipe(
-      takeUntil(this.destroyed)
-    ).subscribe((type) => {
-      this.tourType = type;
-      this.tours = this.filterToursByType(this.filterToursByDate(this.toursStore));
-    });
+    this.toursService.tourType$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((type) => {
+        this.tourType = type;
+        this.tours = this.filterToursByType(
+          this.filterToursByDate(this.toursStore)
+        );
+      });
 
     this.toursService.tourDate$
       .pipe(takeUntil(this.destroyed))
@@ -73,11 +86,13 @@ export class ToursComponent implements OnInit, OnDestroy {
         console.log('Error: ', err);
       }
     );
+
+    this.isAdmin = this.userService.getUser()?.login === 'admin'
   }
 
   ngOnDestroy(): void {
-    this.destroyed.next(true)
-    this.destroyed.complete()
+    this.destroyed.next(true);
+    this.destroyed.complete();
   }
 
   goToTour(id: string) {
@@ -136,41 +151,26 @@ export class ToursComponent implements OnInit, OnDestroy {
     }
   }
 
-  // filterToursByTypeAndDate(): void {
-  //   let filterToursArr: ITour[] = [];
-  //   if (this.tourType) {
-  //     switch (this.tourType.key) {
-  //       case 'single':
-  //         filterToursArr = this.toursStore.filter(
-  //           (tour) => tour.type === 'single'
-  //         );
-  //         break;
+  getCountryDetail(ev: Event, code: string) {
 
-  //       case 'group':
-  //         filterToursArr = this.toursStore.filter(
-  //           (tour) => tour.type === 'group'
-  //         );
-  //         break;
+    ev.stopPropagation();
+    this.toursService.getCountryByCode(code).subscribe((data) => {
 
-  //       case 'all':
-  //       default:
-  //         filterToursArr = [...this.toursStore];
-  //         break;
-  //     }
-  //   } else {
-  //     filterToursArr = [...this.toursStore];
-  //   }
+      if (data?.weatherData) {
+        const weatherInfo = data.weatherData;
+        this.weather = weatherInfo.weather;
+        this.temperature = weatherInfo.temperature;
+      }
 
-  //   if (this.tourDate) {
-  //     this.tours = filterToursArr.filter((tour) => {
-  //       if (isValid(new Date(tour.date))) {
-  //         return this.tourDate === new Date(tour.date).setHours(0, 0, 0, 0);
-  //       } else {
-  //         return false;
-  //       }
-  //     });
-  //   } else {
-  //     this.tours = [...filterToursArr];
-  //   }
-  // }
+      if (data?.countryData) {
+        const countryInfo = data.countryData;
+        this.location = {
+          lat: countryInfo.latlng[0],
+          lng: countryInfo.latlng[1],
+        };
+        this.showModal = true;
+      }
+
+    });
+  }
 }

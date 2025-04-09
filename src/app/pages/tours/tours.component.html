@@ -28,6 +28,11 @@
       styleClass="tour-p-card"
       >
         <ng-template #header>
+          @if (isAdmin) {
+            <div class="delete-tour">
+              <p-button aria-label="Удалить" icon="pi pi-trash" severity="danger"/>
+            </div>
+          }
           <img src="/img/{{item.img}}" alt="Img-tour" class="w-full">
         </ng-template>
         @if (item.description.length > 100) {
@@ -37,7 +42,7 @@
           <p>{{item.description}}</p>
         }
         @if (item.country) {
-          <p>Страна: {{item.country?.name_ru}} <img [src]="item.country?.flag_url" [alt]="item.country?.name_ru"></p>
+          <p (click)="getCountryDetail($event, item.country.iso_code2)">Страна: {{item.country?.name_ru}} <img [src]="item.country?.flag_url" [alt]="item.country?.name_ru"></p>
         }
       </p-card>
     </div>
@@ -46,3 +51,20 @@
     <div class="no-dat">Нет данных</div>
   }
 </div>
+
+<p-dialog [(visible)]="showModal" [modal]="true" [style]="{ width: '50rem' }">
+  @if (showModal) {
+    <map [location]="location"></map>
+  }
+  <ng-template #header>
+    @if (temperature) {
+      <div class="weather">
+        <p class="mr-2">Погода: {{temperature}}°C </p>
+        <img src="/weather/{{weather}}">
+      </div>
+    }
+  </ng-template>
+  <ng-template #footer>
+    <p-button label="Закрыть" [outlined]="true" severity="secondary" (click)="showModal=false" />
+  </ng-template>
+</p-dialog>
