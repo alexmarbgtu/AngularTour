@@ -12,4 +12,5 @@ export const API = {
   countries: `${serverIp}/countries`,
   countryByCode: 'https://restcountries.com/v3.1/alpha',
   getWeather: 'https://api.open-meteo.com/v1/forecast',
+  deleteTour: `${serverIp}/tour/`,
 };

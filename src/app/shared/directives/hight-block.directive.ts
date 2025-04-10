@@ -3,10 +3,11 @@ import { AfterContentChecked, AfterViewInit, Directive, ElementRef, EventEmitter
 @Directive({
   selector: '[appHightBlock]',
   host: {
-    '(document:keyup)' : 'initKeyUp($event)'
+    '(document:keyup)' : 'initKeyUp($event)',
   }
 
 })
+
 export class HightBlockDirective implements AfterViewInit, OnInit, OnChanges, AfterContentChecked {
   @Input() selector: string
   @Input() initFirst: boolean = false
@@ -45,13 +46,28 @@ export class HightBlockDirective implements AfterViewInit, OnInit, OnChanges, Af
 
   changeIndex( shift: -1 | 1 | 0 | 3 | -3) {
     const items = [...this.el.nativeElement.querySelectorAll(this.selector)]
+
     if (!items.length) {
       return;
     }
+
+    const width = items[0].offsetWidth;
+    const widthParent = items[0].parentNode.offsetWidth;
+    const marginRight = parseInt(getComputedStyle(items[0]).marginRight);
+    const marginLeft = parseInt(getComputedStyle(items[0]).marginLeft);
+    const countItemInRow = Math.floor(
+      widthParent / (width + marginLeft + marginRight)
+    );
+
     const index = items.findIndex((el: Element) => el.classList.contains("active"))
     this.index = index === -1 ? 0 : index
     items[this.index].classList.remove('active')
-    this.index += shift
+
+    if (shift === 3 || shift === -3) {
+
+      this.index += (countItemInRow * shift) / Math.abs(shift);
+
+    } else this.index += shift;
 
     if (this.index < 0) {
       if (shift === -1) {
@@ -73,11 +89,11 @@ export class HightBlockDirective implements AfterViewInit, OnInit, OnChanges, Af
 
   initKeyUp(event: KeyboardEvent) {
     // console.log('event', event)
-    if (event. key === 'ArrowRight') {
+    if (event.key === 'ArrowRight') {
       this.changeIndex(1);
     } else if (event.key === 'ArrowLeft') {
       this.changeIndex(-1);
-    } else if (event. key === 'ArrowDown') {
+    } else if (event.key === 'ArrowDown') {
       this.changeIndex(3);
     } else if (event.key === 'ArrowUp') {
       this.changeIndex(-3);

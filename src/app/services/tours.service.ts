@@ -105,4 +105,8 @@ export class ToursService {
         })
       );
   }
+
+  deleteTour(id: string): Observable<ITour[]> {
+    return this.http.delete<ITour[]>(API.deleteTour + id);
+  }
 }

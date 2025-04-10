@@ -19,7 +19,7 @@
   class="tours-list flex flex-wrap justify-content-around align-items-stretch"
 >
   @for (item of tours | search: searchInput.value : 'name'; track item.id) {
-    <div class="m-2 col-3 tour-item align-self-stretch"
+    <div class="mx-4 my-6 tour-item align-self-stretch"
       (click)="goToTour(item.id)"
     >
       <p-card
@@ -30,19 +30,19 @@
         <ng-template #header>
           @if (isAdmin) {
             <div class="delete-tour">
-              <p-button aria-label="Удалить" icon="pi pi-trash" severity="danger"/>
+              <p-button (onClick)="deleteTourDialog($event, item)" aria-label="Удалить" icon="pi pi-trash" severity="danger"/>
             </div>
           }
           <img src="/img/{{item.img}}" alt="Img-tour" class="w-full">
         </ng-template>
+        @if (item.country) {
+          <p class="country-info" (click)="getCountryDetail($event, item.country.iso_code2)">Страна: {{item.country?.name_ru}} <img [src]="item.country?.flag_url" [alt]="item.country?.name_ru"></p>
+        }
         @if (item.description.length > 100) {
           <p title="{{item.description}}">{{item.description.substr(0, 95) + '...'}}</p>
         }
         @else {
           <p>{{item.description}}</p>
-        }
-        @if (item.country) {
-          <p (click)="getCountryDetail($event, item.country.iso_code2)">Страна: {{item.country?.name_ru}} <img [src]="item.country?.flag_url" [alt]="item.country?.name_ru"></p>
         }
       </p-card>
     </div>
@@ -51,6 +51,8 @@
     <div class="no-dat">Нет данных</div>
   }
 </div>
+<p-toast />
+<p-confirmdialog styleClass="dialog-delete-tour"/>
 
 <p-dialog [(visible)]="showModal" [modal]="true" [style]="{ width: '50rem' }">
   @if (showModal) {

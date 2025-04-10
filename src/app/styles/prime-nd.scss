@@ -1,8 +1,9 @@
 .p-card {
 
   &.tour-p-card {
-    height: 450px;
+    height: 400px;
     overflow: hidden;
+
 
     & .p-card-header {
       height: 180px;
@@ -51,4 +52,9 @@ p-menubar {
     background: none;
     border: none;
   }
+}
+
+.dialog-delete-tour.p-dialog {
+  width: 400px;
+  height: 250px;
 }

@@ -15,6 +15,11 @@ import { DialogModule } from 'primeng/dialog';
 import { MapComponent } from '../../shared/components/map/map.component';
 import { UserService } from '../../services/user.service';
 
+//delete tour
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+
 @Component({
   selector: 'app-tours',
   imports: [
@@ -26,7 +31,13 @@ import { UserService } from '../../services/user.service';
     SearchPipe,
     HightBlockDirective,
     DialogModule,
-    MapComponent
+    MapComponent,
+    ConfirmDialog,
+    ToastModule,
+  ],
+  providers: [
+    ConfirmationService,
+    MessageService
   ],
   templateUrl: './tours.component.html',
   styleUrl: './tours.component.scss',
@@ -47,7 +58,9 @@ export class ToursComponent implements OnInit, OnDestroy {
     private toursService: ToursService,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +85,6 @@ export class ToursComponent implements OnInit, OnDestroy {
         this.tours = this.filterToursByType(
           this.filterToursByDate(this.toursStore)
         );
-        // this.filterToursByTypeAndDate();
       });
 
     this.toursService.getTours().subscribe(
@@ -87,7 +99,7 @@ export class ToursComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.isAdmin = this.userService.getUser()?.login === 'admin'
+    this.isAdmin = this.userService.getUser()?.login === 'admin';
   }
 
   ngOnDestroy(): void {
@@ -170,6 +182,40 @@ export class ToursComponent implements OnInit, OnDestroy {
         };
         this.showModal = true;
       }
+    });
+  }
+
+  deleteTourDialog(event: Event, tour: ITour): void {
+    event.stopPropagation();
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: `Будет удалён тур "${tour.name}"?`,
+        header: 'Удаление тура',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Отмена',
+        rejectButtonProps: {
+            label: 'Отмена',
+            severity: 'secondary',
+            outlined: true,
+        },
+        acceptButtonProps: {
+            label: 'Удалить',
+            severity: 'danger',
+        },
+
+        accept: () => {
+
+          this.toursService.deleteTour(tour.id).subscribe((data) => {
+            this.messageService.add({ severity: 'info', detail: 'Тур удалён' });
+
+            this.toursStore = [...data];
+
+            this.tours = this.filterToursByType(
+              this.filterToursByDate(this.toursStore)
+            );
+
+          })
+        },
 
     });
   }
