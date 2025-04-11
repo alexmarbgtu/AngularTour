@@ -16,6 +16,18 @@ export class ToursService {
   private tourDateSubject = new Subject<Date | null>();
   readonly tourDate$ = this.tourDateSubject.asObservable();
 
+  private typeSelectedTours: ITourType = null;
+
+  get getTypeSearchTours(): ITourType {
+    return this.typeSelectedTours;
+  }
+
+  private dateSelectedTours: Date = null;
+
+  get getDateSearchTours(): Date {
+    return this.dateSelectedTours;
+  }
+
   constructor(
     private http: HttpClient,
     private weatherService: WeatherService
@@ -72,10 +84,12 @@ export class ToursService {
 
   initChangeTourType(type: ITourType): void {
     this.tourTypeSubject.next(type);
+    this.typeSelectedTours = type;
   }
 
   initChangeTourDate(date: Date | null): void {
     this.tourDateSubject.next(date);
+    this.dateSelectedTours = date
   }
 
   getCountryByCode(

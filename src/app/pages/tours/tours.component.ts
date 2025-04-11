@@ -64,6 +64,16 @@ export class ToursComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.tourType = this.toursService.getTypeSearchTours;
+    const dateTour = this.toursService.getDateSearchTours;
+    if (dateTour) {
+      this.tourDate = new Date(dateTour).setHours(
+        0,
+        0,
+        0
+      );
+    }
+
     this.toursService.tourType$
       .pipe(takeUntil(this.destroyed))
       .subscribe((type) => {
@@ -90,8 +100,13 @@ export class ToursComponent implements OnInit, OnDestroy {
     this.toursService.getTours().subscribe(
       (data) => {
         if (Array.isArray(data)) {
-          this.tours = data;
+
           this.toursStore = [...data];
+          if (this.tourDate || this.tourType) {
+            this.tours = this.filterToursByType(
+              this.filterToursByDate(this.toursStore)
+            );
+          } else this.tours = data;
         }
       },
       (err) => {
