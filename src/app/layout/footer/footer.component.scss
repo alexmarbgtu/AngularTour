@@ -1,5 +1,82 @@
+@use "variables" as var;
+
 :host {
-  height: 60px;
+  // height: 160px;
   width: 100%;
   display: block;
+}
+
+
+
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+.link {
+  display: block;
+  text-decoration: none;
+}
+
+.flex {
+  display: flex;
+  flex-wrap:  wrap;
+  justify-content:space-between
+}
+
+.footer_content {
+  background: var.$header-background;
+  color: var.$header-footer-color;
+  font-size: 0.8rem;
+}
+
+.footer__item {
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.logo-footer {
+  margin-bottom: 1rem;
+}
+
+.footer-nav {
+  padding: 0;
+}
+
+.footer-nav__item {
+  display: inline-block;
+  margin: 0.5rem .5rem 0 0;
+}
+
+.footer-nav__link {
+  color: unset;
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  display: block;
+  background: #454545;
+  padding: 8px 1rem 6px;
+  transition: all 0.3s ease-in-out ;
+}
+
+.footer-nav__link:hover {
+  color: rgba(255, 255, 255, .8);
+  background: #656565;
+  transition: all 0.3s ease-in-out ;
+}
+
+.footer-contact__link {
+  color: unset;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease-in-out ;
+}
+
+.footer-contact__link:hover {
+  color: #a0a0a0;
+  transition: all 0.3s ease-in-out ;
+}
+
+.footer__icon:hover {
+  background-position-y: -66px;
 }
