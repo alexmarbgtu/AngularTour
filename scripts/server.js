@@ -61,6 +61,9 @@ app.post("/register", (req, res) => {
 app.post("/auth", (req, res) => {
   log("req.body", req.body);
 
+  const authorization = req.header("X-Authentication-Token");
+  console.log("X-Authentication-Token", authorization);
+
   if (req.body?.login && req.body.password) {
     // read file
     const jsonFileData = fs.readFileSync(
@@ -100,6 +103,14 @@ app.post("/auth", (req, res) => {
 
 app.get("/tours", (req, res) => {
   log("tours");
+
+  const authorization = req.header("X-Authentication-Token");
+  if (authorization && authorization !== '1234567') {
+    console.log("X-Authentication-Token", authorization);
+    res.status(401).json("Requires authentication");
+    return;
+  }
+
   const jsonData = JSON.parse( fs.readFileSync(toursJson, "utf-8", (data, err) => {}, (err) => {console.log('Error read file tours, ', err)}));
     console.log("parseJsonData auth", parseJsonData);
   res.send(jsonData);

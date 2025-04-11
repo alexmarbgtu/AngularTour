@@ -5,8 +5,9 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ConfigService } from './services/config.service';
+import { authInterceptor, loggingInterceptor } from './shared/Intercepting/autorization';
 
 function initializeApp(config: ConfigService) {
   return config.loadPromise()
@@ -48,16 +49,27 @@ export const appConfig: ApplicationConfig = {
           'Декабрь',
         ],
         monthNamesShort: [
-          'янв', 'фев', 'мар', 'апр', 'мая', 'июня', 'июля', 'авг', 'сен', 'окт', 'ноя', 'дек',
+          'янв',
+          'фев',
+          'мар',
+          'апр',
+          'мая',
+          'июня',
+          'июля',
+          'авг',
+          'сен',
+          'окт',
+          'ноя',
+          'дек',
         ],
         firstDayOfWeek: 1,
         // dateFormat: 'dd.mm.yy',
         clear: 'Очистить',
-        today: 'Сегодня'
+        today: 'Сегодня',
         //translations
       },
     }),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor, loggingInterceptor])),
     provideAppInitializer(() => initializeApp(inject(ConfigService))),
   ],
 };

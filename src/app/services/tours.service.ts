@@ -33,9 +33,18 @@ export class ToursService {
     private weatherService: WeatherService
   ) {}
 
+  // createAuthorizationHeader(headers: Headers) {
+  //   headers.append('Authorization', 'Basic ' + btoa('username:password'));
+  // }
+
   getTours(): Observable<ITour[]> {
+    // this.createAuthorizationHeader(headers);
     const country = this.http.get<ICountriesResponseItem[]>(API.countries);
-    const tours = this.http.get<ITours>(API.tours);
+    const tours = this.http.get<ITours>(API.tours, {
+      headers: {
+        'Authorization': 'verbose',
+      },
+    });
 
     return forkJoin<[ICountriesResponseItem[], ITours]>([country, tours]).pipe(
       map((data) => {
@@ -89,7 +98,7 @@ export class ToursService {
 
   initChangeTourDate(date: Date | null): void {
     this.tourDateSubject.next(date);
-    this.dateSelectedTours = date
+    this.dateSelectedTours = date;
   }
 
   getCountryByCode(
