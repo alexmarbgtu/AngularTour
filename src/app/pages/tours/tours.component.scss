@@ -30,18 +30,19 @@
   }
 
   & .country-info {
-    transition: color 0.15s ease-out;
+    transition: opacity 0.15s ease-out;
+    opacity: 0.7;
     margin: 0;
     padding: 0.5rem 0 ;
     & img {
       transition: opacity 0.2s ease-out;
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 
   & .country-info:hover {
-    color: #b5ffff;
-    transition: color 0.2s ease-out;
+    transition: opacity 0.15s ease-out;
+    opacity: 1;
     & img {
       transition: opacity 0.2s ease-out;
       opacity: 1;

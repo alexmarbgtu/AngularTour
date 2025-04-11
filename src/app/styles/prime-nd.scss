@@ -1,3 +1,5 @@
+@use "variables" as var;
+
 .p-card {
 
   &.tour-p-card {
@@ -44,6 +46,15 @@
   }
 }
 
+p-menubarsub {
+  & .p-menubar-item-link {
+    color: var.$header-footer-color;
+  }
+  & .p-menubar-item:not(.p-disabled) > .p-menubar-item-content:hover {
+    // background-color: rgba(255,255,255, 0.1);
+    background-color: #3f3f46;
+  }
+}
 p-menubar {
   & .p-menubar-button:hover{
     background: none;
@@ -57,4 +68,20 @@ p-menubar {
 .dialog-delete-tour.p-dialog {
   width: 400px;
   height: 250px;
+}
+
+.aside {
+  & .p-datepicker {
+    width: 100%;
+  }
+}
+
+.logout {
+  & .p-button-icon {
+    color: var.$header-footer-color;
+  }
+
+  & .p-button-label {
+    color: var.$header-footer-color;
+  }
 }
