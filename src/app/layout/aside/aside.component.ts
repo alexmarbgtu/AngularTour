@@ -4,11 +4,11 @@ import { ToursService } from '../../services/tours.service';
 import { FormsModule } from '@angular/forms';
 import { ITourType } from '../../models/tours';
 import { DatePickerModule } from 'primeng/datepicker';
-import { isValid } from 'date-fns';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-aside',
-  imports: [SelectModule, FormsModule, DatePickerModule],
+  imports: [SelectModule, FormsModule, DatePickerModule, ButtonModule],
   templateUrl: './aside.component.html',
   styleUrl: './aside.component.scss',
 })
@@ -27,7 +27,12 @@ export class AsideComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.selectedType = this.tourTypes.find((type) => type.key === 'all')
+    const typeTour = this.tourService.getTypeSearchTours;
+    const typeTourKey = typeTour ? typeTour.key : 'all';
+    this.selectedType = this.tourTypes.find((type) => type.key === typeTourKey);
+
+    const dateTour = this.tourService.getDateSearchTours;
+    if (dateTour) this.date = dateTour;
   }
 
   changeTourType(ev: SelectChangeEvent): void {
@@ -36,6 +41,13 @@ export class AsideComponent implements OnInit {
 
   changeDate(date: Date | null): void {
     this.tourService.initChangeTourDate(date);
+  }
+
+  clearFilter(): void {
+    this.selectedType = this.tourTypes.find((type) => type.key === 'all');
+    this.date = null;
+    this.tourService.initChangeTourType(this.selectedType)
+    this.tourService.initChangeTourDate(this.date);
   }
 
 }

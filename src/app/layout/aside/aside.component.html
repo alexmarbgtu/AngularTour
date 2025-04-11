@@ -1,14 +1,15 @@
-<div class="aside m-3">
-  <p>Выберите тип тура</p>
+<div class="aside mx-3 my-7">
+  <p class="title-filter">Тип тура</p>
   <p-select
     [options]="tourTypes"
     [(ngModel)]="selectedType"
     (onChange)="changeTourType($event)"
     optionLabel="label"
     placeholder="Выберите тип тура"
-    class="w-full md:w-56"
+    class="w-full"
   />
-  <div class="my-3">
+  <p class="mt-5 title-filter">Дата тура</p>
+  <div>
     <p-datepicker
       [(ngModel)]="date"
       [showButtonBar]="true"
@@ -19,4 +20,9 @@
       dateFormat="dd.mm.yy"
     />
   </div>
+  @if (date || selectedType.key !== 'all') {
+    <div class="clear-filter mt-6">
+      <p-button label="Очистить фильтры" icon="pi pi-filter-slash" severity="warn" (onClick)="clearFilter()" />
+    </div>
+  }
 </div>
