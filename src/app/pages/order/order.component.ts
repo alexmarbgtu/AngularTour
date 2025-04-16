@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../services/user.service';
-import { IOrder, IOrderData } from '../../models/order';
+import { IOrderData } from '../../models/order';
 
 @Component({
   selector: 'app-order',
