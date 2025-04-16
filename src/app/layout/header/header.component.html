@@ -10,7 +10,14 @@
         [value]="(basketStore$ | async).length"
         [ngClass]="{'not-visible': (basketStore$ | async).length==0}"
       >
-        <p-button variant="outlined" size="small" aria-label="Удалить" icon="pi pi-shopping-cart" [severity]="(basketStore$ | async).length>0 ? 'success' : 'secondary'"/>
+        <p-button
+          variant="outlined"
+          size="small"
+          aria-label="Удалить"
+          icon="pi pi-shopping-cart"
+          [severity]="(basketStore$ | async).length>0 ? 'success' : 'secondary'"
+          routerLink="/basket"
+        />
       </p-overlaybadge>
     </div>
     <div class="logout">

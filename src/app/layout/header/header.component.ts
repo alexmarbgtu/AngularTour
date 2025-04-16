@@ -5,7 +5,7 @@ import { IUser } from '../../models/user';
 import { MenubarModule } from 'primeng/menubar'
 import { ButtonModule } from 'primeng/button'
 import { MenuItem } from 'primeng/api';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { BasketService } from '../../services/Basket.service';
 import { Observable } from 'rxjs';
@@ -19,7 +19,8 @@ import { ITour } from '../../models/tours';
     ButtonModule,
     OverlayBadgeModule,
     AsyncPipe,
-    NgClass
+    NgClass,
+    RouterLink,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',

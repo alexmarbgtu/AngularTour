@@ -8,6 +8,7 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { ChangePasswordComponent } from './pages/settings/change-password/change-password.component';
 import { StatisticsComponent } from './pages/settings/statistics/statistics.component';
 import { OrderComponent } from './pages/order/order.component';
+import { BasketComponent } from './pages/basket/basket.component';
 
 export const routes: Routes = [
   { path: 'auth', component: AuthComponent, title: 'Авторизация' },
@@ -68,6 +69,18 @@ export const routes: Routes = [
         path: ':id',
         component: OrderComponent,
         title: 'Заказ',
+      },
+    ],
+  },
+  {
+    path: 'basket',
+    canActivate: [authGuard],
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        component: BasketComponent,
+        title: 'Корзина',
       },
     ],
   },

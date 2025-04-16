@@ -9,70 +9,16 @@
       <div class="ml-8 mt-3">
         <h2>Информация о покупателе</h2>
         <form>
+
           <div class="mt-3 user-info" [formGroup]="userForm">
-            <div class="form-group mt-3">
-              <label for="name" class="label-form-control">Имя</label>
-              <input
-                type="text"
-                class="form-control"
-                id="name"
-                pInputText
-                formControlName="firstName"
-                placeholder="Введите имя"
-              >
-            </div>
-            <div class="form-group mt-3">
-              <label for="surname" class="label-form-control">Фамилия</label>
-              <input
-                type="text"
-                class="form-control"
-                id="surname"
-                pInputText
-                formControlName="lastName"
-                placeholder="Введите фамилию"
-              >
-            </div>
-            <div class="form-group mt-3">
-              <label for="cardNumber" class="label-form-control">Номер карты</label>
-              <input
-                type="number"
-                class="form-control"
-                id="cardNumber"
-                pInputText
-                formControlName="cardNumber"
-                placeholder="Введите номер карты"
-              >
-            </div>
-            <div class="form-group mt-3">
-              <label class="label-form-control">Возраст</label>
-              <p-inputnumber
-                styleClass="form-control"
-                name="age"
-                [showButtons]="true"
-                formControlName="age"
-                [min]="0"
+
+            @for (fieldObj of userFormFieldsArr; track fieldObj.control) {
+              <ng-container
+                [ngTemplateOutlet]="formField"
+                [ngTemplateOutletContext]="fieldObj"
               />
-            </div>
-            <div class="form-group mt-3">
-              <label class="label-form-control">День рождения</label>
-              <p-datepicker
-                styleClass="form-control"
-                name="birthDate"
-                formControlName="birthDate"
-                dateFormat="dd.mm.yy"
-              />
-            </div>
-            <div class="form-group mt-3">
-              <label for="citizenship" class="label-form-control">Гражданство</label>
-              <input
-                type="text"
-                class="form-control"
-                id="citizenship"
-                pInputText
-                formControlName="citizenship"
-                placeholder="Введите гражданство"
-              >
-            </div>
+            }
+
             <div class="form-group mt-6">
               <p-button
                 styleClass="btn btn-primary"
@@ -86,3 +32,36 @@
     </div>
   </div>
 </div>
+
+<ng-template #formField let-control="control" let-placeHolder="placeHolder" let-label="label" let-type="type">
+  <div [formGroup]="userForm" class="form-group mt-3">
+    <label [attr.for]="control" class="label-form-control">{{label}}</label>
+    @if (type === 'text') {
+      <input
+        type="text"
+        class="form-control"
+        [id]="label"
+        pInputText
+        [formControlName]="control"
+        [placeholder]="placeHolder"
+      >
+    } @else if (type === 'number') {
+      <p-inputnumber
+        styleClass="form-control"
+        [inputId]="control"
+        [name]="control"
+        [showButtons]="true"
+        [formControlName]="control"
+        [min]="0"
+      />
+    } @else {
+      <p-datepicker
+        styleClass="form-control"
+        [name]="control"
+        [inputId]="control"
+        [formControlName]="control"
+        dateFormat="dd.mm.yy"
+      />
+    }
+  </div>
+</ng-template>

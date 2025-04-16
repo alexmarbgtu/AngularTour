@@ -9,6 +9,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../services/user.service';
 import { IOrderData } from '../../models/order';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-order',
@@ -19,6 +20,7 @@ import { IOrderData } from '../../models/order';
     InputTextModule,
     DatePickerModule,
     ButtonModule,
+    NgTemplateOutlet
   ],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss',
@@ -26,7 +28,15 @@ import { IOrderData } from '../../models/order';
 export class OrderComponent implements OnInit{
   tourId: string = null;
   tour: ITour;
-  userForm: FormGroup
+  userForm: FormGroup;
+  userFormFieldsArr = [
+    {label: 'Имя', placeHolder: 'Введите имя', control: 'firstName', type: 'text'},
+    {label: 'Фамилия', placeHolder: 'Введите фамилию', control: 'lastName', type: 'text'},
+    {label: 'Номер карты', placeHolder: 'Введите номер карты', control: 'cardNumber', type: 'number'},
+    {label: 'Возраст', placeHolder: '', control: 'age', type: 'number'},
+    {label: 'День рождения', placeHolder: '', control: 'birthDate', type: 'date'},
+    {label: 'Гражданство', placeHolder: 'Введите гражданство', control: 'citizenship', type: 'text'},
+  ]
 
   constructor(
     private tourService: ToursService,

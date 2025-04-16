@@ -54,7 +54,7 @@ export class ToursComponent implements OnInit, OnDestroy {
   temperature: number = null;
   weather: string = null;
   isAdmin: boolean = false;
-  selectedTour: ITour = null
+  selectedTour: ITour = null;
 
   constructor(
     private toursService: ToursService,
