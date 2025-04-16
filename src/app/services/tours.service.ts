@@ -19,6 +19,9 @@ export class ToursService {
   private tourDateSubject = new Subject<Date | null>();
   readonly tourDate$ = this.tourDateSubject.asObservable();
 
+  private toursInBasketSubject = new Subject<boolean | null>();
+  readonly toursInBasket$ = this.toursInBasketSubject.asObservable();
+
   private typeSelectedTours: ITourType = null;
 
   get getTypeSearchTours(): ITourType {
@@ -35,18 +38,17 @@ export class ToursService {
     private http: HttpClient,
     private weatherService: WeatherService,
     private loaderService: LoaderService,
-    private basketService: BasketService,
+    private basketService: BasketService
   ) {}
 
   getTours(): Observable<ITour[]> {
-
     // set loader
     this.loaderService.setLoader(true);
 
     const country = this.http.get<ICountriesResponseItem[]>(API.countries);
     const tours = this.http.get<ITours>(API.tours, {
       headers: {
-        'Authorization': 'verbose',
+        Authorization: 'verbose',
       },
     });
 
@@ -63,7 +65,9 @@ export class ToursService {
 
         if (Array.isArray(toursArr)) {
           toursWithCountries = toursArr.map((itm) => {
-            const findTourBasket = basketData.find((itmBasket) => itmBasket.id === itm.id);
+            const findTourBasket = basketData.find(
+              (itmBasket) => itmBasket.id === itm.id
+            );
             if (findTourBasket) itm.inBasket = true;
             return {
               ...itm,
@@ -75,7 +79,7 @@ export class ToursService {
       }),
       tap(() => {
         //hide loader
-        this.loaderService.setLoader(false)
+        this.loaderService.setLoader(false);
       }),
       catchError((err) => {
         this.loaderService.setLoader(false);
@@ -118,6 +122,10 @@ export class ToursService {
     this.dateSelectedTours = date;
   }
 
+  initChangeTourShowInBasket(show: boolean | null): void {
+    this.toursInBasketSubject.next(show);
+  }
+
   getCountryByCode(
     code: string
   ): Observable<{ countryData: any; weatherData: IWeatherRequest }> {
@@ -135,7 +143,6 @@ export class ToursService {
             map((weatherResponse) => {
               const current = weatherResponse.current;
               console.log('weather', current);
-
 
               const weatherData: IWeatherRequest = {
                 weather: this.weatherService.getUrlImgWeather(current),

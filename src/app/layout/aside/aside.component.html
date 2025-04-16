@@ -20,9 +20,26 @@
       dateFormat="dd.mm.yy"
     />
   </div>
+
   @if (date || selectedType.key !== 'all') {
-    <div class="clear-filter mt-6">
-      <p-button label="Очистить фильтры" icon="pi pi-filter-slash" severity="warn" (onClick)="clearFilter()" />
+    <div class="clear-filter mt-5">
+      <p-button
+        label="Очистить фильтры"
+        icon="pi pi-filter-slash"
+        severity="warn"
+        (onClick)="clearFilter()"
+      />
     </div>
   }
+
+  <!-- <p class="mt-5 title-filter">Туры в корзине</p> -->
+  <div class="mt-5">
+    <p-checkbox
+      [(ngModel)]="isBasketTour"
+      [binary]="true"
+      (onChange)="showBasketTours()"
+      inputId="isBasketTour"
+    />
+    <label for="isBasketTour" class="ml-2">Туры в корзине</label>
+  </div>
 </div>

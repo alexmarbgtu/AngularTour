@@ -67,6 +67,25 @@ export class ToursComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+
+    const getTour = () => {
+      this.toursService.getTours().subscribe(
+        (data) => {
+          if (Array.isArray(data)) {
+            this.toursStore = [...data];
+            if (this.tourDate || this.tourType) {
+              this.tours = this.filterToursByType(
+                this.filterToursByDate(this.toursStore)
+              );
+            } else this.tours = data;
+          }
+        },
+        (err) => {
+          console.log('Error: ', err);
+        }
+      );
+    }
+
     this.tourType = this.toursService.getTypeSearchTours;
     const dateTour = this.toursService.getDateSearchTours;
     if (dateTour) {
@@ -100,23 +119,26 @@ export class ToursComponent implements OnInit, OnDestroy {
         );
       });
 
-    this.toursService.getTours().subscribe(
-      (data) => {
-        if (Array.isArray(data)) {
-
-          this.toursStore = [...data];
-          if (this.tourDate || this.tourType) {
-            this.tours = this.filterToursByType(
-              this.filterToursByDate(this.toursStore)
-            );
-          } else this.tours = data;
+    this.toursService.toursInBasket$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((inBasket) => {
+        if (inBasket) {
+          this.basketService.basketStore$
+            .pipe(takeUntil(this.destroyed))
+            .subscribe((basketTours) => {
+              this.toursStore = [...basketTours];
+              this.tours = this.filterToursByType(
+                this.filterToursByDate(basketTours)
+              );
+            })
+        } else {
+          getTour();
         }
-      },
-      (err) => {
-        console.log('Error: ', err);
-      }
-    );
 
+      });
+
+
+    getTour();
     this.isAdmin = this.userService.getUser()?.login === 'admin';
   }
 
