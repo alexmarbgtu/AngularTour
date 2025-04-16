@@ -22,6 +22,11 @@
         <p>Дата тура: {{tourDate | date: 'dd.MM.YYYY'}}</p>
       </p-card>
     </div>
+    <p-button
+      label="Сформировать заказ"
+      styleClass="my-3"
+      (onClick)="initOrder($event)"
+    />
   } @else {
     <div class="no-data">Нет данных</div>
   }

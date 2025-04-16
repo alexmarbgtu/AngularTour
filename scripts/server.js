@@ -14,6 +14,9 @@ const toursJson = "./server-data/tours.json";
 //countries
 const countriesJson = "./server-data/countries.json";
 
+//order
+const orderJson = "./server-data/orders.json";
+
 const app = express();
 const port = 3000;
 // cors logic
@@ -182,6 +185,18 @@ app.delete('/tour/:id', (req, res) => {
     } else {
       throw new Error('Тур не найден по id:', paramId);
     }
+});
+
+
+/*******************get ord */
+app.get('/orders', (req, res) => {
+  const jsonFileData =  fs.readFileSync(orderJson, 'utf-8', (err, data) => {}, (err) => {
+    console.log('err read file tours', err);});
+
+            // parse data
+    const  parseJsonData = JSON.parse(jsonFileData);
+
+    res.send(parseJsonData);
 });
 
 

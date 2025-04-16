@@ -1,6 +1,6 @@
 export interface IUser {
   login: string,
-  password: string,
+  password?: string,
   email?: string,
 }
 export interface IUserRegister {

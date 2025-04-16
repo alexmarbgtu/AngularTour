@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, map, Observable, Subject, switchMap } from 'rxjs';
+import { catchError, delay, forkJoin, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { API } from '../shared/api';
 import { Coords, ICountriesResponseItem, ITour, ITours, ITourType } from '../models/tours';
 import { WeatherService } from './weather.service';
 import { IWeatherRequest } from '../models/weather';
+import { LoaderService } from './loader.service';
+import { IOrder } from '../models/order';
 
 @Injectable({
   providedIn: 'root',
@@ -30,15 +32,15 @@ export class ToursService {
 
   constructor(
     private http: HttpClient,
-    private weatherService: WeatherService
+    private weatherService: WeatherService,
+    private loaderService: LoaderService
   ) {}
 
-  // createAuthorizationHeader(headers: Headers) {
-  //   headers.append('Authorization', 'Basic ' + btoa('username:password'));
-  // }
-
   getTours(): Observable<ITour[]> {
-    // this.createAuthorizationHeader(headers);
+
+    // set loader
+    this.loaderService.setLoader(true);
+
     const country = this.http.get<ICountriesResponseItem[]>(API.countries);
     const tours = this.http.get<ITours>(API.tours, {
       headers: {
@@ -46,7 +48,9 @@ export class ToursService {
       },
     });
 
+    // parralel
     return forkJoin<[ICountriesResponseItem[], ITours]>([country, tours]).pipe(
+      delay(2000), // TODO pause 2s
       map((data) => {
         let toursWithCountries: ITour[] = [];
         const toursArr: ITour[] = data[1].tours;
@@ -63,6 +67,14 @@ export class ToursService {
           });
         }
         return toursWithCountries;
+      }),
+      tap(() => {
+        //hide loader
+        this.loaderService.setLoader(false)
+      }),
+      catchError((err) => {
+        this.loaderService.setLoader(false);
+        return of(null);
       })
     );
   }
@@ -117,6 +129,8 @@ export class ToursService {
           return this.weatherService.getWeather(coords).pipe(
             map((weatherResponse) => {
               const current = weatherResponse.current;
+              console.log('weather', current);
+
 
               const weatherData: IWeatherRequest = {
                 weather: this.weatherService.getUrlImgWeather(current),
@@ -131,5 +145,9 @@ export class ToursService {
 
   deleteTour(id: string): Observable<ITour[]> {
     return this.http.delete<ITour[]>(API.deleteTour + id);
+  }
+
+  postOrder(orderBody: IOrder): Observable<any> {
+    return this.http.post(API.order, orderBody);
   }
 }

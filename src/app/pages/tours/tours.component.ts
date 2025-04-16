@@ -19,6 +19,7 @@ import { UserService } from '../../services/user.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { BasketService } from '../../services/Basket.service';
 
 @Component({
   selector: 'app-tours',
@@ -60,7 +61,8 @@ export class ToursComponent implements OnInit, OnDestroy {
     private router: Router,
     private userService: UserService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private basketService: BasketService,
   ) {}
 
   ngOnInit(): void {
@@ -233,5 +235,15 @@ export class ToursComponent implements OnInit, OnDestroy {
         },
 
     });
+  }
+
+  setItemToBasket(ev: Event, tour: ITour): void {
+    ev.stopPropagation();
+    this.basketService.setItemToBasket(tour);
+  }
+
+  removeItemToBasket(ev: Event, tour: ITour): void {
+    ev.stopPropagation();
+    this.basketService.removeItemToBasket(tour);
   }
 }

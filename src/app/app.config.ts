@@ -7,7 +7,9 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ConfigService } from './services/config.service';
-import { authInterceptor, loggingInterceptor } from './shared/Intercepting/autorization';
+import { authInterceptor, loggingInterceptor } from './shared/Intercepting/authorization';
+import { errorInterceptor } from './shared/Intercepting/error.interceptor';
+import { MessageService } from 'primeng/api';
 
 function initializeApp(config: ConfigService) {
   return config.loadPromise()
@@ -69,7 +71,9 @@ export const appConfig: ApplicationConfig = {
         //translations
       },
     }),
-    provideHttpClient(withInterceptors([authInterceptor, loggingInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, loggingInterceptor, errorInterceptor])),
+    // provideHttpClient(),
     provideAppInitializer(() => initializeApp(inject(ConfigService))),
+    MessageService
   ],
 };

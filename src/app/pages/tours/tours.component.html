@@ -32,6 +32,14 @@
             <div class="delete-tour">
               <p-button (onClick)="deleteTourDialog($event, item)" aria-label="Удалить" icon="pi pi-trash" severity="danger"/>
             </div>
+          } @else {
+            <div class="basket-tour">
+              @if (item.inBasket) {
+                <p-button (onClick)="removeItemToBasket($event, item)" aria-label="Удалить из корзины" icon="pi pi-cart-minus" severity="warn"/>
+              } @else {
+                <p-button (onClick)="setItemToBasket($event, item)" aria-label="Добавить в корзину" icon="pi pi-cart-plus" severity="success"/>
+              }
+            </div>
           }
           <img src="/img/{{item.img}}" alt="Img-tour" class="w-full">
         </ng-template>

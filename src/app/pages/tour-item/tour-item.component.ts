@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToursService } from '../../services/tours.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ITour } from '../../models/tours';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -30,7 +30,8 @@ export class TourItemComponent implements OnInit {
   constructor(
     private toursService: ToursService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +53,10 @@ export class TourItemComponent implements OnInit {
   onTourChange(ev: ITour): void {
     this.tour = ev;
     this.location.replaceState('tours/' + this.tour.id);
+  }
+
+  initOrder(ev: Event): void {
+    this.router.navigate(['/order', this.tour.id])
   }
 
 }

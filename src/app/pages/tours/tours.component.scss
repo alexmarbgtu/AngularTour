@@ -48,6 +48,18 @@
       opacity: 1;
     }
   }
+
+  & .delete-tour {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+
+  & .basket-tour {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+  }
 }
 
 .weather {

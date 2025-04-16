@@ -33,8 +33,8 @@
 }
 
 .footer__item {
-  margin-top: 0.6rem;
-  margin-bottom: 0.6rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
 }
 
 .logo-footer {
@@ -79,4 +79,8 @@
 
 .footer__icon:hover {
   background-position-y: -66px;
+}
+
+.title-item {
+  margin: 0.5rem 0;
 }

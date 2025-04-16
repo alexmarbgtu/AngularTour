@@ -8,6 +8,7 @@ import {
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
+import { environment } from '../../../environments/environment.development';
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const router = inject(Router);
@@ -38,10 +39,14 @@ export function authInterceptor(
 ) {
 
   console.log('url', req.url);
-  if (req.url.includes('/auth') || req.url.includes('/register')) return next(req);
+  if (
+    !req.url.includes(environment.apiUrl) ||
+    (req.url.includes(environment.apiUrl) && (req.url.includes('/auth') || req.url.includes('/register')))) return next(req);
 
   // Inject the current `AuthService` and use it to get an authentication token:
   // const authToken = inject(AuthService).getAuthToken();
+
+  console.log('urlWithToken', req.url);
   const authToken = '1234567';
 
   // Clone the request to add the authentication header.

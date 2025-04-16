@@ -7,6 +7,7 @@ import { authGuard } from './shared/guards/auth.guard';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ChangePasswordComponent } from './pages/settings/change-password/change-password.component';
 import { StatisticsComponent } from './pages/settings/statistics/statistics.component';
+import { OrderComponent } from './pages/order/order.component';
 
 export const routes: Routes = [
   { path: 'auth', component: AuthComponent, title: 'Авторизация' },
@@ -50,9 +51,23 @@ export const routes: Routes = [
           {
             path: 'statistics',
             component: StatisticsComponent,
-            title: 'Статистика', data: {showAside: true}
+            title: 'Статистика',
+            data: { showAside: true },
           },
         ],
+      },
+    ],
+  },
+  {
+    path: 'order',
+    canActivate: [authGuard],
+    component: LayoutComponent,
+    children: [
+      { path: '', redirectTo: '/tours', pathMatch: 'full' },
+      {
+        path: ':id',
+        component: OrderComponent,
+        title: 'Заказ',
       },
     ],
   },

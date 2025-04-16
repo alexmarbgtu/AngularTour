@@ -10,7 +10,8 @@ export interface ITour {
   date?: string,
   type?: string,
   country?: ICountriesResponseItem,
-  code?: string
+  code?: string,
+  inBasket?: boolean
 }
 
 export interface ITours {
