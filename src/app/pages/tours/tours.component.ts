@@ -54,6 +54,7 @@ export class ToursComponent implements OnInit, OnDestroy {
   temperature: number = null;
   weather: string = null;
   isAdmin: boolean = false;
+  selectedTour: ITour = null
 
   constructor(
     private toursService: ToursService,
@@ -180,7 +181,7 @@ export class ToursComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCountryDetail(ev: Event, code: string) {
+  getCountryDetail(ev: Event, code: string, tour: ITour) {
 
     ev.stopPropagation();
     this.toursService.getCountryByCode(code).subscribe((data) => {
@@ -197,6 +198,7 @@ export class ToursComponent implements OnInit, OnDestroy {
           lat: countryInfo.latlng[0],
           lng: countryInfo.latlng[1],
         };
+        this.selectedTour = tour;
         this.showModal = true;
       }
     });

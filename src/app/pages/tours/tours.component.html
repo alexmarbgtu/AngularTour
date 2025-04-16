@@ -44,7 +44,7 @@
           <img src="/img/{{item.img}}" alt="Img-tour" class="w-full">
         </ng-template>
         @if (item.country) {
-          <p class="country-info" (click)="getCountryDetail($event, item.country.iso_code2)">Страна: {{item.country?.name_ru}} <img [src]="item.country?.flag_url" [alt]="item.country?.name_ru"></p>
+          <p class="country-info" (click)="getCountryDetail($event, item.country.iso_code2, item)">Страна: {{item.country?.name_ru}} <img [src]="item.country?.flag_url" [alt]="item.country?.name_ru"></p>
         }
         @if (item.description.length > 100) {
           <p title="{{item.description}}">{{item.description.substr(0, 95) + '...'}}</p>
@@ -64,7 +64,9 @@
 
 <p-dialog [(visible)]="showModal" [modal]="true" [style]="{ width: '50rem' }">
   @if (showModal) {
-    <map [location]="location"></map>
+    <map [location]="location">
+      <p>Тур: {{selectedTour.name}}</p>
+    </map>
   }
   <ng-template #header>
     @if (temperature) {
