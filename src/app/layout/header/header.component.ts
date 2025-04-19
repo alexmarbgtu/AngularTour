@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit {
   initMenuItems(): MenuItem[] {
     return [
       {
-        label: 'Билеты',
+        label: 'Туры',
         routerLink: ['/tours'],
       },
       {
