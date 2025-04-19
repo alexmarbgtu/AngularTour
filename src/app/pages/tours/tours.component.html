@@ -65,7 +65,7 @@
 <p-dialog [(visible)]="showModal" [modal]="true" [style]="{ width: '50rem' }">
   @if (showModal) {
     <map [location]="location">
-      <p>Тур: {{selectedTour.name}}</p>
+      <p class="mt-0">Тур: {{selectedTour.name}}</p>
     </map>
   }
   <ng-template #header>

@@ -1,4 +1,4 @@
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { BasketService } from '../../services/Basket.service';
@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-basket',
-  imports: [TableModule, AsyncPipe, DatePipe, ButtonModule],
+  imports: [TableModule, AsyncPipe, DatePipe, ButtonModule, DecimalPipe],
   templateUrl: './basket.component.html',
   styleUrl: './basket.component.scss',
 })

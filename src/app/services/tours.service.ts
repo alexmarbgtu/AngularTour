@@ -54,7 +54,7 @@ export class ToursService {
 
     // parralel
     return forkJoin<[ICountriesResponseItem[], ITours]>([country, tours]).pipe(
-      delay(1000), // TODO pause 1s
+      delay(500), // TODO pause 1s
       withLatestFrom(this.basketService.basketStore$),
       map(([data, basketData]) => {
         let toursWithCountries: ITour[] = [];
@@ -69,6 +69,10 @@ export class ToursService {
               (itmBasket) => itmBasket.id === itm.id
             );
             if (findTourBasket) itm.inBasket = true;
+            itm.sum = parseInt(itm.price.replace(/[^0-9\s]/gi, ''));
+            itm.currency = itm.price.substring(0,1);
+            // console.log(itm);
+
             return {
               ...itm,
               country: countriesMap.get(itm.code) || null,

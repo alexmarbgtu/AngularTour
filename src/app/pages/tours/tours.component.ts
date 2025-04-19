@@ -36,10 +36,7 @@ import { BasketService } from '../../services/Basket.service';
     ConfirmDialog,
     ToastModule,
   ],
-  providers: [
-    ConfirmationService,
-    MessageService
-  ],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './tours.component.html',
   styleUrl: './tours.component.scss',
 })
@@ -63,20 +60,20 @@ export class ToursComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private basketService: BasketService,
+    private basketService: BasketService
   ) {}
 
   ngOnInit(): void {
-
     const getTour = () => {
       this.toursService.getTours().subscribe(
         (data) => {
           if (Array.isArray(data)) {
             this.toursStore = [...data];
             if (this.tourDate || this.tourType) {
-              this.tours = this.filterToursByType(
-                this.filterToursByDate(this.toursStore)
-              );
+              this.filterTours(this.toursStore);
+              // this.tours = this.filterToursByType(
+              //   this.filterToursByDate(this.toursStore)
+              // );
             } else this.tours = data;
           }
         },
@@ -84,25 +81,22 @@ export class ToursComponent implements OnInit, OnDestroy {
           console.log('Error: ', err);
         }
       );
-    }
+    };
 
     this.tourType = this.toursService.getTypeSearchTours;
     const dateTour = this.toursService.getDateSearchTours;
     if (dateTour) {
-      this.tourDate = new Date(dateTour).setHours(
-        0,
-        0,
-        0
-      );
+      this.tourDate = new Date(dateTour).setHours(0, 0, 0);
     }
 
     this.toursService.tourType$
       .pipe(takeUntil(this.destroyed))
       .subscribe((type) => {
         this.tourType = type;
-        this.tours = this.filterToursByType(
-          this.filterToursByDate(this.toursStore)
-        );
+        this.filterTours(this.toursStore);
+        // this.tours = this.filterToursByType(
+        //   this.filterToursByDate(this.toursStore)
+        // );
       });
 
     this.toursService.tourDate$
@@ -113,10 +107,10 @@ export class ToursComponent implements OnInit, OnDestroy {
         } else {
           this.tourDate = null;
         }
-
-        this.tours = this.filterToursByType(
-          this.filterToursByDate(this.toursStore)
-        );
+        this.filterTours(this.toursStore);
+        // this.tours = this.filterToursByType(
+        //   this.filterToursByDate(this.toursStore)
+        // );
       });
 
     this.toursService.toursInBasket$
@@ -127,16 +121,15 @@ export class ToursComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed))
             .subscribe((basketTours) => {
               this.toursStore = [...basketTours];
-              this.tours = this.filterToursByType(
-                this.filterToursByDate(basketTours)
-              );
-            })
+              this.filterTours(this.toursStore);
+              // this.tours = this.filterToursByType(
+              //   this.filterToursByDate(basketTours)
+              // );
+            });
         } else {
           getTour();
         }
-
       });
-
 
     getTour();
     this.isAdmin = this.userService.getUser()?.login === 'admin';
@@ -203,11 +196,15 @@ export class ToursComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCountryDetail(ev: Event, code: string, tour: ITour) {
+  filterTours(toursArr: ITour[]) {
+    this.tours = this.filterToursByType(
+      this.filterToursByDate(this.toursStore)
+    );
+  };
 
+  getCountryDetail(ev: Event, code: string, tour: ITour) {
     ev.stopPropagation();
     this.toursService.getCountryByCode(code).subscribe((data) => {
-
       if (data?.weatherData) {
         const weatherInfo = data.weatherData;
         this.weather = weatherInfo.weather;
@@ -229,35 +226,32 @@ export class ToursComponent implements OnInit, OnDestroy {
   deleteTourDialog(event: Event, tour: ITour): void {
     event.stopPropagation();
     this.confirmationService.confirm({
-        target: event.target as EventTarget,
-        message: `Будет удалён тур "${tour.name}"?`,
-        header: 'Удаление тура',
-        icon: 'pi pi-info-circle',
-        rejectLabel: 'Отмена',
-        rejectButtonProps: {
-            label: 'Отмена',
-            severity: 'secondary',
-            outlined: true,
-        },
-        acceptButtonProps: {
-            label: 'Удалить',
-            severity: 'danger',
-        },
+      target: event.target as EventTarget,
+      message: `Будет удалён тур "${tour.name}"?`,
+      header: 'Удаление тура',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Отмена',
+      rejectButtonProps: {
+        label: 'Отмена',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Удалить',
+        severity: 'danger',
+      },
 
-        accept: () => {
+      accept: () => {
+        this.toursService.deleteTour(tour.id).subscribe((data) => {
+          this.messageService.add({ severity: 'info', detail: 'Тур удалён' });
 
-          this.toursService.deleteTour(tour.id).subscribe((data) => {
-            this.messageService.add({ severity: 'info', detail: 'Тур удалён' });
-
-            this.toursStore = [...data];
-
-            this.tours = this.filterToursByType(
-              this.filterToursByDate(this.toursStore)
-            );
-
-          })
-        },
-
+          this.toursStore = [...data];
+          this.filterTours(this.toursStore);
+          // this.tours = this.filterToursByType(
+          //   this.filterToursByDate(this.toursStore)
+          // );
+        });
+      },
     });
   }
 

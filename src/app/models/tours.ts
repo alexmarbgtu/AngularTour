@@ -1,17 +1,19 @@
 export interface ITour {
-  id: string,
-  name: string,
-  description: string,
-  tourOperator: string,
-  price: string,
-  img: string,
-  locationId: string,
-  data?: string,
-  date?: string,
-  type?: string,
-  country?: ICountriesResponseItem,
-  code?: string,
-  inBasket?: boolean
+  id: string;
+  name: string;
+  description: string;
+  tourOperator: string;
+  price: string;
+  img: string;
+  locationId: string;
+  data?: string;
+  date?: string;
+  type?: string;
+  country?: ICountriesResponseItem;
+  code?: string;
+  inBasket?: boolean;
+  sum?: number;
+  currency?: string,
 }
 
 export interface ITours {
