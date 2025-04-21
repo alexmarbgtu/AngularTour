@@ -5,10 +5,10 @@
             <th pSortableColumn="name">
               Тур <p-sortIcon field="name"/>
             </th>
-            <th pSortableColumn="country">
-              Страна <p-sortIcon field="country"/>
+            <th pSortableColumn="country.name_ru">
+              Страна <p-sortIcon field="country.name_ru"/>
             </th>
-            <th pSortableColumn="sum">
+            <th [style]="{'text-align': 'right'}" pSortableColumn="sum">
               Цена <p-sortIcon field="sum"/>
             </th>
             <th pSortableColumn="date">
@@ -41,4 +41,5 @@
         </tr>
     </ng-template>
 </p-table>
+<p-confirmdialog styleClass="dialog-delete-tour"/>
 </div>
