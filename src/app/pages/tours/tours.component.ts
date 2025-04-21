@@ -9,7 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SearchPipe } from '../../shared/pipes/search.pipe';
 import { HightBlockDirective } from '../../shared/directives/hight-block.directive';
-import { Subject, takeUntil } from 'rxjs';
+import { map, Subject, takeUntil, withLatestFrom } from 'rxjs';
 import { isValid } from 'date-fns'
 import { DialogModule } from 'primeng/dialog';
 import { MapComponent } from '../../shared/components/map/map.component';
@@ -18,7 +18,6 @@ import { UserService } from '../../services/user.service';
 //delete tour
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
 import { BasketService } from '../../services/Basket.service';
 
 @Component({
@@ -34,15 +33,15 @@ import { BasketService } from '../../services/Basket.service';
     DialogModule,
     MapComponent,
     ConfirmDialog,
-    ToastModule,
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService,],
   templateUrl: './tours.component.html',
   styleUrl: './tours.component.scss',
 })
 export class ToursComponent implements OnInit, OnDestroy {
   tours: ITour[] = [];
   toursStore: ITour[] = [];
+  toursStoreServer: ITour[] = [];
   tourDate: number | null = null;
   tourType: ITourType = null;
   destroyed = new Subject<boolean>();
@@ -64,24 +63,20 @@ export class ToursComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const getTour = () => {
-      this.toursService.getTours().subscribe(
-        (data) => {
-          if (Array.isArray(data)) {
-            this.toursStore = [...data];
-            if (this.tourDate || this.tourType) {
-              this.filterTours(this.toursStore);
-              // this.tours = this.filterToursByType(
-              //   this.filterToursByDate(this.toursStore)
-              // );
-            } else this.tours = data;
-          }
-        },
-        (err) => {
-          console.log('Error: ', err);
+    this.toursService.getTours().subscribe(
+      (data) => {
+        if (Array.isArray(data)) {
+          this.toursStore = [...data];
+          this.toursStoreServer = [...data];
+          if (this.tourDate || this.tourType) {
+            this.filterTours(this.toursStore);
+          } else this.tours = data;
         }
-      );
-    };
+      },
+      (err) => {
+        console.log('Error: ', err);
+      }
+    );
 
     this.tourType = this.toursService.getTypeSearchTours;
     const dateTour = this.toursService.getDateSearchTours;
@@ -94,9 +89,6 @@ export class ToursComponent implements OnInit, OnDestroy {
       .subscribe((type) => {
         this.tourType = type;
         this.filterTours(this.toursStore);
-        // this.tours = this.filterToursByType(
-        //   this.filterToursByDate(this.toursStore)
-        // );
       });
 
     this.toursService.tourDate$
@@ -108,30 +100,37 @@ export class ToursComponent implements OnInit, OnDestroy {
           this.tourDate = null;
         }
         this.filterTours(this.toursStore);
-        // this.tours = this.filterToursByType(
-        //   this.filterToursByDate(this.toursStore)
-        // );
       });
 
     this.toursService.toursInBasket$
-      .pipe(takeUntil(this.destroyed))
-      .subscribe((inBasket) => {
-        if (inBasket) {
+      .pipe(
+        withLatestFrom(
           this.basketService.basketStore$
-            .pipe(takeUntil(this.destroyed))
-            .subscribe((basketTours) => {
-              this.toursStore = [...basketTours];
-              this.filterTours(this.toursStore);
-              // this.tours = this.filterToursByType(
-              //   this.filterToursByDate(basketTours)
-              // );
-            });
-        } else {
-          getTour();
-        }
+        ),
+        map(([inBasket, basketStore]) => {
+          if (inBasket) return basketStore;
+          else return this.toursStoreServer;
+        })
+      )
+      .subscribe((data) => {
+        this.toursStore = [...data];
+        this.filterTours(this.toursStore);
       });
 
-    getTour();
+    this.basketService.basketStore$
+      .pipe(
+        withLatestFrom(this.toursService.toursInBasket$),
+        map(([basketStore, inBasket]) => {
+          if (inBasket) return basketStore;
+          else return this.toursStoreServer;
+        })
+      )
+      .subscribe((data) => {
+        this.toursStore = [...data];
+        this.filterTours(this.toursStore);
+      });
+
+    // this.getTour();
     this.isAdmin = this.userService.getUser()?.login === 'admin';
   }
 
@@ -247,9 +246,6 @@ export class ToursComponent implements OnInit, OnDestroy {
 
           this.toursStore = [...data];
           this.filterTours(this.toursStore);
-          // this.tours = this.filterToursByType(
-          //   this.filterToursByDate(this.toursStore)
-          // );
         });
       },
     });
