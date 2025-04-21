@@ -4,7 +4,7 @@ import { Component, OnChanges, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Password, PasswordModule } from 'primeng/password';
+import { PasswordModule } from 'primeng/password';
 import { UserService } from '../../../services/user.service';
 import { MessageService } from 'primeng/api';
 import { IUserRegister } from '../../../models/user';
