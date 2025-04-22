@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, delay, forkJoin, map, Observable, of, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, catchError, delay, forkJoin, map, Observable, of, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { API } from '../shared/api';
-import { Coords, ICountriesResponseItem, ITour, ITours, ITourType } from '../models/tours';
+import { Coords, ICountriesResponseItem, ITour, ITours, ITourType, tourTypes } from '../models/tours';
 import { WeatherService } from './weather.service';
 import { IWeatherRequest } from '../models/weather';
 import { LoaderService } from './loader.service';
@@ -13,8 +13,13 @@ import { BasketService } from './Basket.service';
   providedIn: 'root',
 })
 export class ToursService {
-  private tourTypeSubject = new Subject<ITourType>();
-  readonly tourType$ = this.tourTypeSubject.asObservable();
+  // private tourTypeSubject = new Subject<ITourType>();
+  // readonly tourType$ = this.tourTypeSubject.asObservable();
+
+  private tourTypeBehaviorSubject = new BehaviorSubject<ITourType>(
+    tourTypes[2]
+  );
+  readonly tourTypeBehavSub$  = this.tourTypeBehaviorSubject.asObservable();
 
   private tourDateSubject = new Subject<Date | null>();
   readonly tourDate$ = this.tourDateSubject.asObservable();
@@ -22,11 +27,11 @@ export class ToursService {
   private toursInBasketSubject = new Subject<boolean | null>();
   readonly toursInBasket$ = this.toursInBasketSubject.asObservable();
 
-  private typeSelectedTours: ITourType = null;
+  // private typeSelectedTours: ITourType = null;
 
-  get getTypeSearchTours(): ITourType {
-    return this.typeSelectedTours;
-  }
+  // get getTypeSearchTours(): ITourType {
+  //   return this.typeSelectedTours;
+  // }
 
   private dateSelectedTours: Date = null;
 
@@ -116,9 +121,13 @@ export class ToursService {
     }
   }
 
-  initChangeTourType(type: ITourType): void {
-    this.tourTypeSubject.next(type);
-    this.typeSelectedTours = type;
+  // initChangeTourType(type: ITourType): void {
+  //   this.tourTypeSubject.next(type);
+  //   this.typeSelectedTours = type;
+  // }
+
+  initChangeTourTypeBehar(type: ITourType): void {
+    this.tourTypeBehaviorSubject.next(type);
   }
 
   initChangeTourDate(date: Date | null): void {
@@ -171,7 +180,7 @@ export class ToursService {
     return this.http.get<IOrderResponse>(API.orders).pipe(
       map((ordersResponse) => {
         return ordersResponse.orders;
-      }),
+      })
     );
   }
 }

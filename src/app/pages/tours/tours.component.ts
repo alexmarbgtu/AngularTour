@@ -63,6 +63,13 @@ export class ToursComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.toursService.tourTypeBehavSub$
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((type) => {
+        this.tourType = type;
+        this.filterTours(this.toursStore);
+      });
+
     this.toursService.getTours().subscribe(
       (data) => {
         if (Array.isArray(data)) {
@@ -78,18 +85,13 @@ export class ToursComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.tourType = this.toursService.getTypeSearchTours;
+    // this.tourType = this.toursService.getTypeSearchTours;
     const dateTour = this.toursService.getDateSearchTours;
     if (dateTour) {
       this.tourDate = new Date(dateTour).setHours(0, 0, 0);
     }
 
-    this.toursService.tourType$
-      .pipe(takeUntil(this.destroyed))
-      .subscribe((type) => {
-        this.tourType = type;
-        this.filterTours(this.toursStore);
-      });
+
 
     this.toursService.tourDate$
       .pipe(takeUntil(this.destroyed))
