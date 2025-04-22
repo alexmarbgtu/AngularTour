@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ITour } from '../../models/tours';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToursService } from '../../services/tours.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../services/user.service';
 import { IOrderData } from '../../models/order';
 import { NgTemplateOutlet } from '@angular/common';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-order',
@@ -20,35 +21,62 @@ import { NgTemplateOutlet } from '@angular/common';
     InputTextModule,
     DatePickerModule,
     ButtonModule,
-    NgTemplateOutlet
+    NgTemplateOutlet,
   ],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss',
 })
-export class OrderComponent implements OnInit{
+export class OrderComponent implements OnInit {
   tourId: string = null;
   tour: ITour;
   userForm: FormGroup;
   userFormFieldsArr = [
-    {label: 'Имя', placeHolder: 'Введите имя', control: 'firstName', type: 'text'},
-    {label: 'Фамилия', placeHolder: 'Введите фамилию', control: 'lastName', type: 'text'},
-    {label: 'Номер карты', placeHolder: 'Введите номер карты', control: 'cardNumber', type: 'number'},
-    {label: 'Возраст', placeHolder: '', control: 'age', type: 'number'},
-    {label: 'День рождения', placeHolder: '', control: 'birthDate', type: 'date'},
-    {label: 'Гражданство', placeHolder: 'Введите гражданство', control: 'citizenship', type: 'text'},
-  ]
+    {
+      label: 'Имя',
+      placeHolder: 'Введите имя',
+      control: 'firstName',
+      type: 'text',
+    },
+    {
+      label: 'Фамилия',
+      placeHolder: 'Введите фамилию',
+      control: 'lastName',
+      type: 'text',
+    },
+    {
+      label: 'Номер карты',
+      placeHolder: 'Введите номер карты',
+      control: 'cardNumber',
+      type: 'number',
+    },
+    { label: 'Возраст', placeHolder: '', control: 'age', type: 'number' },
+    {
+      label: 'День рождения',
+      placeHolder: '',
+      control: 'birthDate',
+      type: 'date',
+    },
+    {
+      label: 'Гражданство',
+      placeHolder: 'Введите гражданство',
+      control: 'citizenship',
+      type: 'text',
+    },
+  ];
 
   constructor(
     private tourService: ToursService,
     private route: ActivatedRoute,
     private userService: UserService,
+    private messageService: MessageService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.tourId = this.route.snapshot.paramMap.get('id');
-    this.tourService.getTourById(this.tourId).subscribe(
-      (tour) => {this.tour = tour}
-    )
+    this.tourService.getTourById(this.tourId).subscribe((tour) => {
+      this.tour = tour;
+    });
 
     //reactive form
     this.userForm = new FormGroup({
@@ -76,8 +104,12 @@ export class OrderComponent implements OnInit{
     const postObj = {
       userLogin,
       tourId: this.tour.id,
-      personalData: [personalData]
-    }
-    this.tourService.postOrder(postObj).subscribe()
+      personalData: [personalData],
+    };
+    console.log('initOrder', postObj);
+    this.tourService.postOrder(postObj).subscribe(() => {
+      this.router.navigate(['/tours'])
+      this.messageService.add({ severity: 'info', detail: 'Заказ оформлен' });
+    });
   }
 }

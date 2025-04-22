@@ -187,16 +187,33 @@ app.delete('/tour/:id', (req, res) => {
     }
 });
 
+/*******************post order */
+  app.post('/order', (req, res) => {
+    const jsonFileData =  fs.readFileSync(orderJson, 'utf-8', (err, data) => {}, (err) => {
+      console.log('err read orderJson tours', err);});
+
+    // parse data
+    const  parseJsonData = JSON.parse(jsonFileData);
+    const order = req.body;
+    parseJsonData.orders.push(order)
+
+    const json = JSON.stringify({orders: parseJsonData.orders});
+
+    fs.writeFileSync(orderJson, json, 'utf-8', (data) => {}, (err) => {
+      console.log('err write file', err)
+    });
+    res.send('ok');
+  });
 
 /*******************get ord */
 app.get('/orders', (req, res) => {
   const jsonFileData =  fs.readFileSync(orderJson, 'utf-8', (err, data) => {}, (err) => {
     console.log('err read file tours', err);});
 
-            // parse data
-    const  parseJsonData = JSON.parse(jsonFileData);
+  // parse data
+  const  parseJsonData = JSON.parse(jsonFileData);
 
-    res.send(parseJsonData);
+  res.send(parseJsonData);
 });
 
 

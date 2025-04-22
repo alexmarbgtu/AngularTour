@@ -14,4 +14,5 @@ export const API = {
   getWeather: 'https://api.open-meteo.com/v1/forecast',
   deleteTour: `${serverIp}/tour/`,
   order: `${serverIp}/order`,
+  orders: `${serverIp}/orders`,
 };

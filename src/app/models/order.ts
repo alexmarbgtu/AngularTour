@@ -1,3 +1,5 @@
+import { ITour } from "./tours";
+
 export interface IOrderData {
   firstName: string,
   lastName: string,
@@ -10,5 +12,9 @@ export interface IOrderData {
 export interface IOrder {
   userLogin: string;
   tourId: string;
-  personalData: IOrderData[]
+  personalData: IOrderData[],
+}
+
+export interface IOrderResponse {
+  orders: IOrder[]
 }

@@ -6,7 +6,7 @@ import { Coords, ICountriesResponseItem, ITour, ITours, ITourType } from '../mod
 import { WeatherService } from './weather.service';
 import { IWeatherRequest } from '../models/weather';
 import { LoaderService } from './loader.service';
-import { IOrder } from '../models/order';
+import { IOrder, IOrderResponse } from '../models/order';
 import { BasketService } from './Basket.service';
 
 @Injectable({
@@ -70,7 +70,7 @@ export class ToursService {
             );
             if (findTourBasket) itm.inBasket = true;
             itm.sum = parseInt(itm.price.replace(/[^0-9\s]/gi, ''));
-            itm.currency = itm.price.substring(0,1);
+            itm.currency = itm.price.substring(0, 1);
             // console.log(itm);
 
             return {
@@ -163,7 +163,15 @@ export class ToursService {
     return this.http.delete<ITour[]>(API.deleteTour + id);
   }
 
-  postOrder(orderBody: IOrder): Observable<any> {
-    return this.http.post(API.order, orderBody);
+  postOrder(orderBody: IOrder): Observable<string> {
+    return this.http.post(API.order, orderBody, { responseType: 'text' });
+  }
+
+  getOrders(): Observable<IOrder[]> {
+    return this.http.get<IOrderResponse>(API.orders).pipe(
+      map((ordersResponse) => {
+        return ordersResponse.orders;
+      }),
+    );
   }
 }

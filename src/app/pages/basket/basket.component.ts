@@ -29,11 +29,10 @@ export class BasketComponent {
 
   removeItemToBasket(ev: Event, tour: ITour): void {
     ev.stopPropagation();
-    console.log('removeItemToBasket');
 
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: `Из корзины будет удалён тур "${tour.name}"?`,
+      message: `Из корзины будет удалён тур "${tour.name}"`,
       header: 'Удаление тура из корзины',
       icon: 'pi pi-info-circle',
       rejectLabel: 'Отмена',

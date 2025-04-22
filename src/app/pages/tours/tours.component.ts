@@ -226,7 +226,7 @@ export class ToursComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: `Будет удалён тур "${tour.name}"?`,
+      message: `Будет удалён тур "${tour.name}"`,
       header: 'Удаление тура',
       icon: 'pi pi-info-circle',
       rejectLabel: 'Отмена',
