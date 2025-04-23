@@ -17,7 +17,7 @@ export class ToursService {
   // readonly tourType$ = this.tourTypeSubject.asObservable();
 
   private tourTypeBehaviorSubject = new BehaviorSubject<ITourType>(
-    tourTypes[2]
+    tourTypes[0]
   );
   readonly tourTypeBehavSub$  = this.tourTypeBehaviorSubject.asObservable();
 

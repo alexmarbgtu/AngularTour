@@ -33,10 +33,10 @@ export interface ITourType {
 }
 
 export const tourTypes: ITourType[] = [
-    { key: 'single', label: 'Одиночный' },
-    { key: 'group', label: 'Групповой' },
-    { key: 'all', label: 'Все' },
-  ];
+  { key: 'all', label: 'Все' },
+  { key: 'single', label: 'Одиночный' },
+  { key: 'group', label: 'Групповой' },
+];
 
 // export const tourTypeStart = { key: 'all', label: 'Все' };
 export interface ILocation {

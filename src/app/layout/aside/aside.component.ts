@@ -61,7 +61,7 @@ export class AsideComponent implements OnInit {
 
   clearFilter(): void {
     // this.selectedType = this.tourTypes.find((type) => type.key === 'all');
-    this.selectedType = this.tourTypes[2];
+    this.selectedType = this.tourTypes[0];
     this.date = null;
     this.tourService.initChangeTourTypeBehar(this.selectedType);
     this.tourService.initChangeTourDate(this.date);
