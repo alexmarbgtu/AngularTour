@@ -85,7 +85,6 @@ export class ToursComponent implements OnInit, OnDestroy {
       }
     );
 
-    // this.tourType = this.toursService.getTypeSearchTours;
     const dateTour = this.toursService.getDateSearchTours;
     if (dateTour) {
       this.tourDate = new Date(dateTour).setHours(0, 0, 0);
@@ -107,7 +106,7 @@ export class ToursComponent implements OnInit, OnDestroy {
     this.toursService.toursInBasket$
       .pipe(
         withLatestFrom(
-          this.basketService.basketStore$
+          this.basketService.basketStore$,
         ),
         map(([inBasket, basketStore]) => {
           if (inBasket) return basketStore;
@@ -261,5 +260,8 @@ export class ToursComponent implements OnInit, OnDestroy {
   removeItemToBasket(ev: Event, tour: ITour): void {
     ev.stopPropagation();
     this.basketService.removeItemToBasket(tour);
+
+    const index = this.toursStoreServer.findIndex((itm) => itm.id === tour.id);
+    this.toursStoreServer[index].inBasket = tour.inBasket
   }
 }
